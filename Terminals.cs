@@ -1,12 +1,14 @@
 
 namespace lab{
 
-public static class Terminals{
+public static class AllTerminals{
     public static void makeAllOfTheTerminals(){
         Grammar.addTerminals( new Terminal[] {
+            new("WHITESPACE",       @"\s+" ),
             new("EQ",               @"="),
             new("NUM",              @"\d+" ),
-            new("STRINGCONSTANT",   @"(?x)  "" (\\[nr""]  | [^\\] )*  ""  "),
+            new("COMMENT",          @"//[^\n]*" ),
+            new("STRCONST",   @"(?x)  "" (\\[nr""]  | [^\\] )*  ""  "),
             new("LPAREN",           @"\("),
             new("RPAREN",           @"\)"),
             new("LBRACE",           @"\{"),
@@ -19,6 +21,7 @@ public static class Terminals{
             new("ID",               @"(?!\d)\w+" )
         });
     }
-}
 
-}
+
+    }// End class AllTerminals
+}// End namespace
