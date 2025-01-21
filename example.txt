@@ -1,0 +1,9 @@
+x = 5
+y = 2
+z = x + y
+
+if z   >       4    :
+    print( z )
+else:
+    print (     x , y )
+       

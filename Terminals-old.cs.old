@@ -1,0 +1,51 @@
+namespace lab{
+
+public static class Terminals{
+
+    //this makes them
+    public static void makeAllOfTheTerminals(){
+        Grammar.addTerminals( new Terminal[]{
+            new("ADDOP", @"[-+]"),
+            //x = verbose mode
+            //s = dotall mode
+            new("COMMENT", @"(?sx)
+                //[^\n]* 
+                |
+                /[*] .*? [*]/ 
+            "),
+            new("IF", @"\bif\b"),
+            new("ELSE", @"\belse\b"),
+            new("EQ", "="),
+
+            new("FLOAT", @"(?ix)
+                -?\d+\.\d*      | #decimal: 123.45
+
+                -?             #leading minus, optional
+                \d+             #initially we have some digits
+                (\.\d*)?        #we might have a dot and some digits
+                e               #exponential
+                -?              #optional minus
+                \d+             #one or more digits 
+            "),
+
+            new("MULOP", "[*/%]"),  //  \*|/|%    [*]|/|%
+            new("NOT", "!(?!=)"),
+            new("NUM", @"[0-9]+" ),
+            new("SEMI", ";"),
+            new("RELOP", @"<=|>=|<(?!=<)|>|!==|!=|===|=="),
+            new("SHIFTOP", @">>>|<<<|<<|>>"),
+            //lastSymbol, Other
+            //starting out, make sure we don't have a digit
+            //then if that is true, match one or more word
+            //characters (letters, numbers, underscore)
+            new("ID", @"(?!\d)\w+" )
+        });
+
+
+    }
+
+
+}
+
+
+}
