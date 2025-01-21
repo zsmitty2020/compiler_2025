@@ -22,7 +22,7 @@ public class Token{
 
 public class Tokenizer{
 
-    bool verbose=true;
+    bool verbose=false;
 
     string input;   //stuff we are tokenizing
     int line;   //current line number
