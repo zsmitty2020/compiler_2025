@@ -1,0 +1,4 @@
+line numbers
+multiline tokens
+json escaping
+maximal munch

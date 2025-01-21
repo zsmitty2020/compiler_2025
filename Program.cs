@@ -6,18 +6,22 @@
             //initialize our grammar
             AllTerminals.makeAllOfTheTerminals();
 
-            string inp = File.ReadAllText(args[0]);
-            var tokens = new List<Token>();
-            var T = new Tokenizer(inp);
-            while(true){
-                Token tok = T.next();
-                if( tok == null )
-                    break;
-                tokens.Add(tok);
+            foreach(var item in args){
+                string inp = File.ReadAllText(item);
+                var tokens = new List<Token>();
+                var T = new Tokenizer(inp);
+                while(true){
+                    Token tok = T.next();
+                    if( tok == null )
+                        break;
+                    tokens.Add(tok);
+                }
+                Console.WriteLine("OUTPUT FOR FILE: " + item);
+                foreach(var t in tokens){
+                    Console.WriteLine(t);
+                }
             }
-            foreach(var t in tokens){
-                Console.WriteLine(t);
-            }
+            
             }
 
     } //End class TheCompiler

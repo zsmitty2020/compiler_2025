@@ -16,13 +16,17 @@ namespace lab{
         }
         public override string ToString()
         {
-            return $"{{ \"sym\": \"{this.sym}\" , \"line\" : {this.line}, \"col\": {this.col}, \"lexeme\" : \"{this.lexeme}\"  }}";
+            bool addCols = true;
+            if(addCols){
+                return $"{{ \"sym\": \"{this.sym}\", \"line\": {this.line}, \"col\": {this.col}, \"lexeme\" : \"{this.lexeme}\"  }}";
+            }
+            return $"{{ \"sym\": \"{this.sym}\", \"line\": {this.line}, \"lexeme\" : \"{this.lexeme}\"  }}";
         }
     
     }//End class Token
 
     public class Tokenizer{
-        bool verbose=true;  //If we want extra output
+        bool verbose=false;  //If we want extra output
         string input;   //stuff we are tokenizing
         int line;   //current line number
         int index;  //where we are at in the input
@@ -47,7 +51,7 @@ namespace lab{
             String lexeme=null;
             var tmp = 0;
 
-            //col++;
+            col++;
             foreach( var t in Grammar.terminals){
                 tmp++;
                 Match M = t.rex.Match( this.input, this.index );
@@ -63,11 +67,10 @@ namespace lab{
 
             if( sym == null ){
                 //print error message
-                Console.WriteLine("Error at line " + this.line + ", idx " + this.index);
+                Console.WriteLine("Error at line " + this.line + ", col " + this.index);
                 Environment.Exit(1);
             }
             this.index += lexeme.Length;
-            //this.col += lexeme.Length - 1;
 
             if(lexeme.Contains('\n')){
                 if(verbose){
@@ -86,7 +89,7 @@ namespace lab{
             }
 
             var tok = new Token( sym , lexeme, line, col);
-
+            this.col += lexeme.Length - 1;  //Need this to make sure the column is at the front of tokens
             if( verbose ){
                 Console.WriteLine("RETURNING TOKEN: " + tok);
             }
