@@ -1,4 +1,5 @@
 
+
 using System.Text.RegularExpressions;
 
 namespace lab{
@@ -20,6 +21,9 @@ public class Token{
 }
 
 public class Tokenizer{
+
+    bool verbose=true;
+
     string input;   //stuff we are tokenizing
     int line;   //current line number
     int index;  //where we are at in the input
@@ -32,10 +36,20 @@ public class Tokenizer{
 
     public Token next(){
 
+        if( this.index >= this.input.Length ){
+            if(verbose){
+                Console.WriteLine("next(): At EOF!");
+            }
+            return null;
+        }
+
         String sym=null;
         String lexeme=null;
         foreach( var t in Grammar.terminals){
             Match M = t.rex.Match( this.input, this.index );
+            if(verbose){
+                Console.WriteLine("Trying terminal "+t.sym+ "   Matched? "+M.Success);
+            }
             if( M.Success ){
                 sym = t.sym;
                 lexeme = M.Groups[0].Value;
@@ -45,12 +59,19 @@ public class Tokenizer{
 
         if( sym == null ){
             //print error message
+            Console.WriteLine("Error at line "+this.line);
             Environment.Exit(1);
         }
+        this.index += lexeme.Length;
+
+
         var tok = new Token( sym , lexeme, line);
+        if( verbose ){
+            Console.WriteLine("RETURNING TOKEN: "+tok);
+        }
         return tok;
-    }
+    }//next()
 
-}
+} //class Tokenizer
 
-}
+} //namespace
