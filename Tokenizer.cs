@@ -27,7 +27,7 @@ namespace lab{
     }//End class Token
 
     public class Tokenizer{
-        bool verbose=true;  //If we want extra output
+        bool verbose=false;  //If we want extra output
         string input;   //stuff we are tokenizing
         int line;   //current line number
         int index;  //where we are at in the input
@@ -48,8 +48,8 @@ namespace lab{
                 return null;
             }
 
-            String sym=null;
-            String lexeme=null;
+            String sym = null;
+            String lexeme = ".";
 
             col++;
             foreach( var t in Grammar.terminals){
@@ -57,12 +57,16 @@ namespace lab{
                 if(verbose){
                     Console.WriteLine("Trying terminal " + t.sym + "\t\tMatched? " + M.Success);
                 }
-                //FIXME: Dont break on success, keep track of the longest lexeme!!!
+
+                //Dont break on success, keep track of the longest lexeme!!!
                 //for maximal munch
                 if( M.Success ){
                     sym = t.sym;
-                    lexeme = M.Groups[0].Value;
-                    break;
+                    if(M.Groups[0].Value.Length >= lexeme.Length){
+                        if(verbose)
+                            Console.WriteLine("MAXMUNCH | Old: " + lexeme + " New: " + M.Groups[0].Value);
+                        lexeme = M.Groups[0].Value;
+                    }                        
                 }
             }
 
@@ -74,13 +78,18 @@ namespace lab{
             }
             this.index += lexeme.Length;
 
-            if(lexeme.Contains('\n'))
-                this.line++;
+            //if(lexeme.Contains('\n'))
+              //  this.line++;
 
             //this gets rid of whitespace and comments
             if(sym == "WHITESPACE" || sym == "COMMENT"){
                 if (verbose){
                     Console.WriteLine("SKIPPING WHITESPACE OR COMMENT");
+                }
+                foreach( char c in lexeme){
+                    if(c == '\n'){
+                        this.line++;
+                    }
                 }
                 return this.next();
             }

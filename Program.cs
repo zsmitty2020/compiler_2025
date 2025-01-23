@@ -7,7 +7,7 @@
             AllTerminals.makeAllOfTheTerminals();
             Grammar.addWhitespace();
 
-            bool verbose = true;
+            bool verbose = falsee;
 
             foreach(var item in args){
                 
