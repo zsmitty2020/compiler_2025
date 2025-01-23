@@ -13,7 +13,7 @@ public static class AllTerminals{
             //        /[*] .*? [*]/
             //    "),                                 // '#' let's you comment in the regex system
             
-            new("STRINGCONSTANT",   @"(?x)  "" (\\[nr""]  | [^\\] )*  ""  "),
+            new("STRINGCONSTANT",   @"(?x)  "" (\\[nr""]  | [^\\""] )*  ""  "),
             new("LPAREN",           @"\("),
             new("RPAREN",           @"\)"),
             new("LBRACE",           @"\{"),

@@ -7,11 +7,16 @@
             AllTerminals.makeAllOfTheTerminals();
             Grammar.addWhitespace();
 
+            bool verbose = true;
+
             foreach(var item in args){
-                Console.WriteLine("*******************************");
-                Console.WriteLine("OUTPUT FOR FILE: " + item);  //Writes what file we are outputting
-                Console.WriteLine("*******************************");
                 
+                if( verbose ){
+                    Console.WriteLine("*******************************");
+                    Console.WriteLine("OUTPUT FOR FILE: " + item);  //Writes what file we are outputting
+                    Console.WriteLine("*******************************");
+                }
+                 
                 string inp = File.ReadAllText(item);
                 var tokens = new List<Token>();
                 var T = new Tokenizer(inp);

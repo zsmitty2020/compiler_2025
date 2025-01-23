@@ -21,7 +21,7 @@ namespace lab{
             if(addCols){
                 return $"{{ \"sym\": \"{this.sym}\", \"line\": {this.line}, \"col\": {this.col}, \"lexeme\" : \"{lex}\"  }}";
             }
-            return $"{{ \"sym\": \"{this.sym}\", \"line\": {this.line}, \"lexeme\" : \"{this.lexeme}\"  }}";
+            return $"{{ \"sym\": \"{this.sym}\", \"line\": {this.line}, \"lexeme\" : \"{lex}\"  }}";
         }
     
     }//End class Token
@@ -50,11 +50,9 @@ namespace lab{
 
             String sym=null;
             String lexeme=null;
-            var tmp = 0;
 
             col++;
             foreach( var t in Grammar.terminals){
-                tmp++;
                 Match M = t.rex.Match( this.input, this.index );
                 if(verbose){
                     Console.WriteLine("Trying terminal " + t.sym + "\t\tMatched? " + M.Success);
@@ -68,6 +66,7 @@ namespace lab{
                 }
             }
 
+
             if( sym == null ){
                 //print error message
                 Console.WriteLine("Error at line " + this.line + ", col " + this.index);
@@ -75,13 +74,8 @@ namespace lab{
             }
             this.index += lexeme.Length;
 
-            if(lexeme.Contains('\n')){
-                if(verbose){
-                    Console.WriteLine("FOUND NEWLINE");
-                }
-                this.col = 0;
+            if(lexeme.Contains('\n'))
                 this.line++;
-            }
 
             //this gets rid of whitespace and comments
             if(sym == "WHITESPACE" || sym == "COMMENT"){
@@ -90,8 +84,17 @@ namespace lab{
                 }
                 return this.next();
             }
+            
 
             var tok = new Token( sym , lexeme, line, col);
+
+
+            foreach( char c in lexeme){
+                if(c == '\n'){
+                    this.line++;
+                }
+            }
+
             this.col += lexeme.Length - 1;  //Need this to make sure the column is at the front of tokens
             if( verbose ){
                 Console.WriteLine("RETURNING TOKEN: " + tok);
