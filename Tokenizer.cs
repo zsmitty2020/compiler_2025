@@ -59,6 +59,8 @@ namespace lab{
                 if(verbose){
                     Console.WriteLine("Trying terminal " + t.sym + "\t\tMatched? " + M.Success);
                 }
+                //FIXME: Dont break on success, keep track of the longest lexeme!!!
+                //for maximal munch
                 if( M.Success ){
                     sym = t.sym;
                     lexeme = M.Groups[0].Value;
