@@ -13,6 +13,10 @@ namespace lab{
             }
         }
 
+        public static void addWhitespace(){
+            Grammar.addTerminals(new Terminal[] {new("WHITESPACE",       @"\s+" )});
+        }
+
         public static bool isTerminal(string sym){
             return allTerminals.Contains(sym);
         }

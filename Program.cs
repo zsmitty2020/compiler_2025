@@ -5,8 +5,13 @@
 
             //initialize our grammar
             AllTerminals.makeAllOfTheTerminals();
+            Grammar.addWhitespace();
 
             foreach(var item in args){
+                Console.WriteLine("*******************************");
+                Console.WriteLine("OUTPUT FOR FILE: " + item);  //Writes what file we are outputting
+                Console.WriteLine("*******************************");
+                
                 string inp = File.ReadAllText(item);
                 var tokens = new List<Token>();
                 var T = new Tokenizer(inp);
@@ -16,7 +21,7 @@
                         break;
                     tokens.Add(tok);
                 }
-                Console.WriteLine("OUTPUT FOR FILE: " + item);
+                
                 foreach(var t in tokens){
                     Console.WriteLine(t);
                 }

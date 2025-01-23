@@ -16,9 +16,10 @@ namespace lab{
         }
         public override string ToString()
         {
-            bool addCols = true;
+            var lex = lexeme.Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\n", "\\n");
+            bool addCols = false;
             if(addCols){
-                return $"{{ \"sym\": \"{this.sym}\", \"line\": {this.line}, \"col\": {this.col}, \"lexeme\" : \"{this.lexeme}\"  }}";
+                return $"{{ \"sym\": \"{this.sym}\", \"line\": {this.line}, \"col\": {this.col}, \"lexeme\" : \"{lex}\"  }}";
             }
             return $"{{ \"sym\": \"{this.sym}\", \"line\": {this.line}, \"lexeme\" : \"{this.lexeme}\"  }}";
         }
@@ -26,7 +27,7 @@ namespace lab{
     }//End class Token
 
     public class Tokenizer{
-        bool verbose=false;  //If we want extra output
+        bool verbose=true;  //If we want extra output
         string input;   //stuff we are tokenizing
         int line;   //current line number
         int index;  //where we are at in the input
