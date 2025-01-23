@@ -49,7 +49,7 @@ namespace lab{
             }
 
             String sym = null;
-            String lexeme = ".";
+            String lexeme = "";
 
             col++;
             foreach( var t in Grammar.terminals){
