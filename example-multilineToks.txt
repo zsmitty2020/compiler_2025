@@ -1,7 +1,0 @@
-test = 1 
-multiline = "this 
-is 
-a
-new line"
-
-other = "another string :("

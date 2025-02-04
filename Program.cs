@@ -4,7 +4,7 @@
         public static void Main(string[] args){
 
             //initialize our grammar
-            AllTerminals.makeAllOfTheTerminals();
+            Terminals.makeThem();
             Grammar.addWhitespace();
 
             bool verbose = false;
@@ -27,9 +27,13 @@
                     tokens.Add(tok);
                 }
                 
+                Console.WriteLine("[");
                 foreach(var t in tokens){
                     Console.WriteLine(t);
+                    if( tokens.IndexOf(t) != tokens.Count - 1)
+                        Console.WriteLine(",");
                 }
+                Console.WriteLine("]");
             }
             
             }

@@ -4,7 +4,7 @@ namespace lab{
         public static List<Terminal> terminals = new();
         public static HashSet<string> allTerminals = [];
 
-        public static void addTerminals( Terminal[] terminals){
+        public static void defineTerminals( Terminal[] terminals){
             foreach(var t in terminals){
                 if( isTerminal( t.sym ) )
                     throw new Exception("THERE IS A COPY OF THIS TERMINAL!");
@@ -14,7 +14,7 @@ namespace lab{
         }
 
         public static void addWhitespace(){
-            Grammar.addTerminals(new Terminal[] {new("WHITESPACE",       @"\s+" )});
+            Grammar.defineTerminals(new Terminal[] {new("WHITESPACE",       @"\s+" )});
         }
 
         public static bool isTerminal(string sym){
