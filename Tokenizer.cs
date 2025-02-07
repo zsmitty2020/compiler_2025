@@ -1,3 +1,4 @@
+/*
 using System.Text.RegularExpressions;
 
 namespace lab{
@@ -112,6 +113,216 @@ namespace lab{
 
             return tok;
         }//next()
+
+    } //End class Tokenizer
+} //End namespace
+*/
+using System.Text.RegularExpressions;
+
+namespace lab{
+
+public class Token{
+    public string sym; 
+    //public string lastRealSym;
+    public string lexeme;
+    public int line;
+    public Token( string sym, string lexeme, int line){
+        this.sym = sym;
+        //this.lastRealSym = "";
+        this.lexeme = lexeme;
+        this.line = line;
+    }
+    public override string ToString()
+    {
+        var lex = lexeme.Replace("\\","\\\\").Replace("\"","\\\"").Replace("\n","\\n");
+
+        return $"{{ \"sym\": \"{this.sym}\" , \"line\" : {this.line}, \"lexeme\" : \"{lex}\"  }}";
+    }
+
+}
+
+public class Tokenizer{
+
+    bool verbose=false;
+
+    string input;   //stuff we are tokenizing
+    string lastSym = "TEMP"; //last Sym
+    int line;   //current line number
+    int index;  //where we are at in the input
+
+    Stack<Token> nesting = new();
+
+    public Tokenizer(string inp){
+        this.input = inp;
+        this.line = 1;
+        this.index = 0;
+    }
+
+    //we can insert an implicit semicolon after these things
+    List<string> implicitSemiAfter = new(){"NUM","RPAREN","BOOLCONST","BREAK",
+                                            "CONTINUE", "FNUM", "PLUSPLUS", "RBRACE",
+                                            "RBRACKET", "RETURN", "STRINGCONST", "TYPE", "ID"
+                                            };
+
+    public Token next(){
+
+        String sym=null;
+        String lexeme=null;
+
+
+
+        
+
+        //If we've exhausted the input, return EOF
+        if( this.index >= this.input.Length ){
+            if(verbose){
+                Console.WriteLine("next(): At EOF!");
+            }
+            if(nesting.Count != 0){
+                Console.WriteLine("NOT EMPTY STACK: " + nesting.Pop());
+                Environment.Exit(2);
+            }
+            return null;
+        }
+
+        var maxMamunch = -1;
+        
+        foreach( var t in Grammar.terminals){
+            Match M = t.rex.Match( this.input, this.index );
+
+            if( sym == "WHITESPACE" || sym == "COMMENT"){
+                this.index += lexeme.Length;
+                foreach(var c in lexeme){
+                    if( c == '\n' )
+                        this.line++;
+                    }
+
+                return this.next();
+            }
+
+            if(verbose){
+                Console.WriteLine("Trying terminal "+t.sym+ "   Matched? "+M.Success);
+            }
+
+            if( M.Success ){
+                if( maxMamunch < 0 ){
+                    sym = t.sym;
+                    lexeme = M.Groups[0].Value;
+                    maxMamunch = lexeme.Length;
+                }
+                else if (maxMamunch < lexeme.Length){
+                    sym = t.sym;
+                    lexeme = M.Groups[0].Value;
+                    maxMamunch = lexeme.Length;
+                }
+            }
+        }
+
+        
+
+        /*
+        //consume leading whitespace
+        while( this.index < this.input.Length && Char.IsWhiteSpace( this.input[this.index] ) && lexeme.Contains('\n')){
+            
+            //implicit semis
+            if( implicitSemiAfter.Contains(lastRealSym) && nesting.Count == 0){
+                if(verbose){Console.WriteLine(lastRealSym);}      //print
+                var tmptok = new Token( "SEMI" , "", line);
+                
+                if( this.input[this.index] == '\n' ){
+                    this.line++;}
+
+                this.index++;
+                
+                return tmptok;
+            }
+
+            if( this.input[this.index] == '\n' ){
+                this.line++;}
+            this.index++;
+
+        }
+        */
+
+
+        if( sym == null ){
+            //print error message
+            Console.WriteLine("Error at line "+this.line);
+            Environment.Exit(1);
+        }
+
+        this.index += lexeme.Length;
+        var tok = new Token( sym , lexeme, line);
+        if( verbose ){
+            Console.WriteLine("GOT TOKEN: "+tok);
+        }
+    
+        //FIXME: Do maintenance on nesting stack
+        // if LPAREN or LBRACKET: push to stack
+        // if RPAREN or RBRACKET: pop from stack (first do checks!)
+        
+        if(sym == "LPAREN" || sym == "LBRACKET"){
+            nesting.Push(tok);
+        }
+
+        if( sym == "RPAREN"){
+            if(nesting.Count > 0){
+                if(nesting.Peek().lexeme != "("){
+                    Console.WriteLine("Error at line " + line + ": Expected LPAREN to match with RPAREN\n");
+                    Environment.Exit(2);
+                }
+                else nesting.Pop();
+            }
+            else{
+                Console.WriteLine("Error at line " + line + ": Unexpected RPAREN\n");
+                Environment.Exit(2);
+            }
+        }
+
+        if (sym == "RBRACKET"){
+            if(nesting.Count > 0){
+                if(nesting.Peek().lexeme != "["){
+                    Console.WriteLine("Error at line " + line + ": Expected LBRACKET to match with RBRACKET\n");
+                    Environment.Exit(2);
+                }
+                else nesting.Pop();
+            }
+            else{
+                Console.WriteLine("Error at line " + line + ": Unexpected RBRACKET\n");
+                Environment.Exit(2);
+            }
+        } 
+
+
+        if( sym == "WHITESPACE" && implicitSemiAfter.Contains(lastSym) && nesting.Count == 0 && lexeme.Contains('\n')){
+                if(verbose){Console.WriteLine(lastSym);}      //print
+                
+                var tmptok = new Token( "SEMI" , "", line);
+                foreach(var c in lexeme){
+                    if( c == '\n' )
+                        this.line++;
+                    }
+
+                
+                return tmptok;
+        }
+
+        if( sym == "WHITESPACE"){
+            //this.index += lexeme.Length;
+            foreach(var c in lexeme){
+                if( c == '\n' )
+                    this.line++;
+                }
+
+            return this.next();
+            }
+
+        else {      
+            lastSym = sym; 
+            return tok;
+        }
+
+    }//next()
 
     } //End class Tokenizer
 } //End namespace
