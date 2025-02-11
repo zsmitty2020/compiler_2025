@@ -6,6 +6,7 @@ namespace lab{
         public static List<Terminal> terminals = new();
         public static HashSet<string> allTerminals = [];
         public static List<Production> productions = new();
+        public static Dictionary<string, List<Production> > productionByLHS = new();    //New in DFA 2 lab
         public static HashSet<string> allNonterminals = new();
 
         /// <summary>
@@ -39,7 +40,10 @@ namespace lab{
         /// </summary>
         /// <param name="terminals"></param>
         /// <exception cref="Exception"></exception>
-        public static void defineProductions(PSpec[] specs){
+        public static int defineProductions(PSpec[] specs){
+            //Return the index of the first production we added
+            int howMany = productions.Count;
+
             //parse stuff out of our pspec's and put it somewhere
 
             foreach( var psec in specs){
@@ -71,11 +75,15 @@ namespace lab{
                 
             }
             
+
+            MAKE; //SURE TO ADD //TO THIS THING IN THIS AREA!!!! --->> productionByLHS
+
+
             /*
             Console.WriteLine("PRODUCTIONS");
             foreach(var prod in productions) Console.WriteLine(prod);
             */
-
+            return howMany;
         }
 
         public static void check(){
