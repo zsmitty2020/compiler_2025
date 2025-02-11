@@ -5,6 +5,7 @@
 
             //initialize our grammar
             Terminals.makeThem();
+            Productions.makeThem();
             Grammar.addWhitespace();
 
             bool verbose = false;
@@ -17,6 +18,12 @@
                     Console.WriteLine("*******************************");
                 }
                  
+                Grammar.check();
+
+                Grammar.dump();
+
+                return;
+
                 string inp = File.ReadAllText(item);
                 var tokens = new List<Token>();
                 var T = new Tokenizer(inp);
