@@ -125,8 +125,6 @@ namespace lab{
                 foreach(Production p in productions){
                     var allNullable = true;
                     foreach(string s in p.rhs){
-                        if( p.lhs == "S")
-                            Console.WriteLine($"THE RHS: {s}");
                         if( !nullable.Contains(s) && s != "lambda" && s != "\u03bb")
                             allNullable = false;
                     }
