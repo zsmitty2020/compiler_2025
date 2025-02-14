@@ -7,6 +7,8 @@ namespace lab{
         public static HashSet<string> allTerminals = [];
         public static List<Production> productions = new();
         public static HashSet<string> allNonterminals = new();
+        public static HashSet<string> nullable = new();
+        public static Dictionary<string,HashSet<string>> first = new();
 
         /// <summary>
         /// DO THIS BEFORE DEFINE PRODUCTIONS
@@ -41,7 +43,7 @@ namespace lab{
         /// <exception cref="Exception"></exception>
         public static void defineProductions(PSpec[] specs){
             //parse stuff out of our pspec's and put it somewhere
-
+            allNonterminals.Add("S");
             foreach( var psec in specs){
                 //if( isNonterminal( psec.spec ) )
                 //    throw new Exception("THERE IS A COPY OF THIS PRODUCTION!");
@@ -51,8 +53,10 @@ namespace lab{
                     Console.WriteLine("PRINT");
                     Console.WriteLine(strlist[i]);
                 }*/
-                var lhs = strlist[0];
-                var rhsString = strlist[1];
+                var lhs = strlist[0].Replace('\n', ' ').Replace('\t', ' ').Trim();
+                allNonterminals.Add(lhs);
+
+                var rhsString = strlist[1].Replace('\n', ' ').Replace('\t', ' ').Trim();
                 strlist = rhsString.Split("|", StringSplitOptions.RemoveEmptyEntries);
 
                 foreach(string item in strlist){
@@ -63,7 +67,7 @@ namespace lab{
                     if ( productions.Contains(p)) throw new Exception("THERE IS A COPY OF THIS PRODUCTION! Production: " + p);
                     else productions.Add(p);
 
-                    foreach(string stmt in stmts) if(!isTerminal(stmt)) allNonterminals.Add(stmt);
+                    foreach(string stmt in stmts) if(!isTerminal(stmt) && !isNonterminal(stmt)) allNonterminals.Add(stmt);
 
                     //Console.WriteLine(p);
 
@@ -71,30 +75,100 @@ namespace lab{
                 
             }
             
-            /*
-            Console.WriteLine("PRODUCTIONS");
-            foreach(var prod in productions) Console.WriteLine(prod);
-            */
-
-        }
+        }//End defineProductions Function
 
         public static void check(){
-                //check for problems. panic if so.
-                foreach( Production p in productions){
-                    foreach( string sym in p.rhs){
-                        if(!isTerminal(sym) && !isNonterminal(sym)){
-                            throw new Exception("Undefined symbol: "+sym);
-                        }
+            //check for problems. panic if so.
+            foreach( Production p in productions){
+                foreach( string sym in p.rhs){
+                    if(!isTerminal(sym) && !isNonterminal(sym)){
+                        throw new Exception("Undefined symbol: "+sym);
                     }
                 }
             }
+        }
 
         public static void dump(){
-                //dump grammar stuff to the screen (debugging)
-                foreach( var p in productions ){
-                    Console.WriteLine(p);
+            //dump grammar stuff to the screen (debugging)
+            foreach( var p in productions ){
+                Console.WriteLine(p);
+            }
+
+            //Print Nullable
+            Console.Write("NULLABLE: ");
+            Console.WriteLine(String.Join<string>(", ", nullable));              
+
+            //Print Firsts
+            
+            foreach(var sym in first.Keys){
+                Console.Write($"first[{sym}] = ");
+                Console.WriteLine(String.Join<string>(", ", first[sym]));
+            }
+        }
+
+        public static void computeNullableAndFirst(){
+            var flag = true;
+            while(flag){
+                flag = false;
+                //TODO: Finish computing nullable
+                //Adds all explicitly nullable items to the nullableSet
+                foreach(Production p in productions){
+                    foreach(string s in p.rhs){
+                        if( s == "lambda" && !nullable.Contains(p.lhs)){
+                            nullable.Add(p.lhs);
+                            flag = true;
+                        }
+                    }
+                }
+                
+                //Adds all implicitly nullable items to the nullableSet
+                foreach(Production p in productions){
+                    var allNullable = true;
+                    foreach(string s in p.rhs){
+                        if( p.lhs == "S")
+                            Console.WriteLine($"THE RHS: {s}");
+                        if( !nullable.Contains(s) && s != "lambda" && s != "\u03bb")
+                            allNullable = false;
+                    }
+
+                    if(allNullable && !nullable.Contains(p.lhs)){
+                        nullable.Add(p.lhs);
+                        flag = true;
+                    }
+                }
+
+            }//End while loop
+            
+            foreach( var sym in Grammar.allTerminals){
+                if( sym != "WHITESPACE"){
+                    first[sym] = new();
+                    first[sym].Add(sym);
                 }
             }
+            foreach(var sym in Grammar.allNonterminals){
+                first[sym] = new();
+            }
+
+            flag=true;
+            while(flag){
+                flag=false;
+                //TODO: Finish computing first
+                foreach(var p in productions){
+                    foreach(string s in p.rhs){
+
+                        int sizeBefore = first[p.lhs].Count;
+                        first[p.lhs].UnionWith(first[s]);
+                        int sizeAfter = first[p.lhs].Count;
+                        if(sizeBefore < sizeAfter)
+                            flag = true;
+                        if( !nullable.Contains(s))
+                            break;
+                    }
+                }
+            }//End while loop
+        }
+
+
 
     }//End class Grammer
 } //End namespace

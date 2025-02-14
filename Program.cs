@@ -19,7 +19,7 @@
                 }
                  
                 Grammar.check();
-
+                Grammar.computeNullableAndFirst();
                 Grammar.dump();
 
                 return;
