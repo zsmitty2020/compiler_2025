@@ -3,7 +3,9 @@ namespace lab{
 
 public class Productions{
     public static void makeThem(){
+        
         Grammar.defineProductions( new PSpec[] {
+            
             new(@"S :: decls"),
             new(@"decls :: funcdecl decls | classdecl decls | vardecl decls | SEMI decls | lambda"),
             new(@"funcdecl :: FUNC ID LPAREN optionalPdecls RPAREN optionalReturn LBRACE stmts RBRACE SEMI"),
@@ -69,6 +71,9 @@ public class Productions{
                             | calllist2 COMMA expr"),
             new(@"calllist2 :: expr
                              | calllist2 COMMA expr")
+
+
+                             
         } //end new PSpec
         );//end Grammar.defineProductions()
     }//end makeThem()

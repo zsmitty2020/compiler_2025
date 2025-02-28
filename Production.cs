@@ -1,3 +1,4 @@
+using System.Diagnostics.Metrics;
 
 namespace lab{
     public class Production {
@@ -5,10 +6,13 @@ namespace lab{
         public string lhs;      //foo
         public string[] rhs;    //[ bar, baz, bam]
         public PSpec pspec;
+        private static int counter = 0;
+        public readonly int unique;
         public Production(PSpec pspec, string lhs, string[] rhs){
             this.pspec=pspec;
             this.lhs=lhs;
             this.rhs=rhs;
+            this.unique = counter++;    //Give every production a hidden unique value
         }
         public override string ToString(){
             string rhsStr;

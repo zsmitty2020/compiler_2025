@@ -9,6 +9,8 @@ namespace lab{
         public static HashSet<string> allNonterminals = new();
         public static HashSet<string> nullable = new();
         public static Dictionary<string,HashSet<string>> first = new();
+        public static Dictionary<string, List<Production> > productionByLHS = new();    //New in DFA 2 lab
+
 
         /// <summary>
         /// DO THIS BEFORE DEFINE PRODUCTIONS
@@ -18,7 +20,7 @@ namespace lab{
         public static void defineTerminals( Terminal[] terminals){
             foreach(var t in terminals){
                 if( isTerminal( t.sym ) )
-                    throw new Exception("THERE IS A COPY OF THIS TERMINAL!");
+                    throw new Exception($"THERE IS A COPY OF THIS TERMINAL! --> {t.sym}");
                 Grammar.terminals.Add(t);
                 allTerminals.Add(t.sym);
             }
@@ -36,12 +38,46 @@ namespace lab{
             return allNonterminals.Contains(sym);
         }
 
+        //TEMP JHUDSON PRODUCTIONS
+        public static int defineProductions(PSpec[] specs){
+            //Return the index of the first production that we added
+            int howMany = productions.Count;
+            foreach( var pspec in specs){
+                var idx = pspec.spec.IndexOf("::");
+                if( idx == -1 )
+                    throw new Exception("No :: in production spec");
+                string lhs = pspec.spec.Substring(0,idx).Trim();
+                Grammar.allNonterminals.Add(lhs);
+                string rhss = pspec.spec.Substring(idx+2).Trim();
+                string[] rhsl = rhss.Trim().Split("|",StringSplitOptions.RemoveEmptyEntries );
+                foreach( string tmp in rhsl){
+                    string[] rhs = tmp.Trim().Split(" ",StringSplitOptions.RemoveEmptyEntries);
+                    if( rhs.Length == 1 && (rhs[0] == "lambda" || rhs[0] == "\u03bb" ) )
+                        rhs = new string[0];
+                    for(int i=0;i<rhs.Length;++i){
+                        rhs[i]=rhs[i].Trim();
+                    }
+                    Grammar.productions.Add( new Production(pspec, lhs, rhs));
+
+                    //Added by me from my code
+                    if( !productionByLHS.Keys.Contains(lhs) )
+                        productionByLHS[lhs] = new();
+                    productionByLHS[lhs].Add( new Production(pspec, lhs, rhs) );
+                }
+            }
+            return howMany;
+        }
+
+        /*
         /// <summary>
         /// DO THIS AFTER DEFINE TERMINALS
         /// </summary>
         /// <param name="terminals"></param>
         /// <exception cref="Exception"></exception>
-        public static void defineProductions(PSpec[] specs){
+        public static int defineProductions(PSpec[] specs){
+            //Return the index of the first production we added
+            int howMany = productions.Count;
+
             //parse stuff out of our pspec's and put it somewhere
             allNonterminals.Add("S");
             foreach( var psec in specs){
@@ -49,10 +85,7 @@ namespace lab{
                 //    throw new Exception("THERE IS A COPY OF THIS PRODUCTION!");
                 var str = psec.spec;
                 String[] strlist = str.Split("::", StringSplitOptions.RemoveEmptyEntries);
-                /*for( var i = 0 ; i < strlist.Length; i++){
-                    Console.WriteLine("PRINT");
-                    Console.WriteLine(strlist[i]);
-                }*/
+
                 var lhs = strlist[0].Replace('\n', ' ').Replace('\t', ' ').Trim();
                 allNonterminals.Add(lhs);
 
@@ -71,12 +104,21 @@ namespace lab{
 
                     //Console.WriteLine(p);
 
-                }
-                
-            }
-            
-        }//End defineProductions Function
+                    var newProd = new Production(psec, lhs, stmts);
+                    Grammar.productions.Add( newProd );
+                    if( !productionByLHS.Keys.Contains(lhs) )
+                        productionByLHS[lhs] = new();
+                    productionByLHS[lhs].Add( newProd );
 
+                }
+            }
+
+            
+            
+            return howMany;
+            
+        }//End defineProductions Function */
+        
         public static void check(){
             //check for problems. panic if so.
             foreach( Production p in productions){
@@ -110,7 +152,7 @@ namespace lab{
             var flag = true;
             while(flag){
                 flag = false;
-                //TODO: Finish computing nullable
+                
                 //Adds all explicitly nullable items to the nullableSet
                 foreach(Production p in productions){
                     foreach(string s in p.rhs){
@@ -152,7 +194,7 @@ namespace lab{
             flag=true;
             while(flag){
                 flag=false;
-                //TODO: Finish computing first
+                
                 foreach(var p in productions){
                     foreach(string s in p.rhs){
 

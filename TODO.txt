@@ -1,4 +1,0 @@
-Tokenize the list of terminals and output as JSON list 
-to stdout
-with implicit semicolon
-and not in brackets
