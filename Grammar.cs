@@ -57,12 +57,14 @@ namespace lab{
                     for(int i=0;i<rhs.Length;++i){
                         rhs[i]=rhs[i].Trim();
                     }
-                    Grammar.productions.Add( new Production(pspec, lhs, rhs));
 
+                    var tempProduction = new Production(pspec, lhs, rhs);
+                    Grammar.productions.Add( tempProduction );
+                    
                     //Added by me from my code
                     if( !productionByLHS.Keys.Contains(lhs) )
                         productionByLHS[lhs] = new();
-                    productionByLHS[lhs].Add( new Production(pspec, lhs, rhs) );
+                    productionByLHS[lhs].Add( tempProduction );
                 }
             }
             return howMany;
@@ -168,7 +170,8 @@ namespace lab{
                     var allNullable = true;
                     foreach(string s in p.rhs){
                         if( p.lhs == "S")
-                            Console.WriteLine($"THE RHS: {s}");
+                            continue;
+                            //Console.WriteLine($"THE RHS: {s}");
                         if( !nullable.Contains(s) && s != "lambda" && s != "\u03bb")
                             allNullable = false;
                     }

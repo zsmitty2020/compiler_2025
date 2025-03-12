@@ -3,7 +3,7 @@ namespace lab{
 
 public class Terminals{
     public static void makeThem(){
-        Grammar.defineTerminals( new Terminal[] {
+        Grammar.defineTerminals( new Terminal[] {   //currently not using these, as our defineProductions defines our terminals as well
             new("ADDOP",            @"[-+]"),
             new("ANDOP",            @"\band\b"),
             new("ARROW",            @"->"),

@@ -5,6 +5,9 @@ namespace lab{
 
     public class ItemSet{
         public HashSet<LRItem> items;
+        public int getSize(){
+            return items.Count();
+        }
         public override int GetHashCode()
         {
             var tmp = items.Count;
@@ -41,7 +44,7 @@ namespace lab{
             foreach(var I in this.items ){
                 L.Add(I.ToString());
             }
-            return String.Join("\n",L.ToArray());
+            return String.Join("\n\t",L.ToArray());
         }
 
     }//End ItemSet
@@ -60,11 +63,12 @@ namespace lab{
         public override string ToString()
         {
             string r = $"State {this.unique}\n";
-            r += this.label;
-            r += "---------------\n";
+            r += "\t" + this.label;
+            //Console.WriteLine($"MY LABEL: {this.label}");
+            r += "\n\tTransitions:";
             foreach( string sym in this.transitions.Keys){
                 DFAState q = transitions[sym];
-                r += $"{sym} -> {q.unique}";
+                r += $"\n\t\t{sym} \u2192 {q.unique}";
             }
             return r;
         }
@@ -72,9 +76,9 @@ namespace lab{
     }//End class DFAState
 
     public static class DFA{
-        static List<DFAState> allStates = new();
+        public static List<DFAState> allStates = new();
     
-        public static void dump(string filename){
+        public static void dumpToFile(string filename){
             using(var sw = new StreamWriter(filename)){
                 sw.WriteLine("digraph d{");
 
@@ -95,6 +99,12 @@ namespace lab{
 
                 sw.WriteLine("}");
 
+            }
+        }//End dumpToFile function
+
+        public static void dump(){
+            foreach(var state in allStates){
+                Console.WriteLine(state);
             }
         }//End dump function
 
@@ -138,6 +148,7 @@ namespace lab{
             Dictionary< ItemSet , DFAState> statemap = new();
             Production P = Grammar.productions[productionNumber];
             LRItem I = new LRItem( P, 0);
+            I.lookaheads.Add("$");
             DFAState startState = new DFAState( 
                 computeClosure(
                     new HashSet<LRItem>(){I} 
@@ -162,10 +173,12 @@ namespace lab{
                         allStates.Add(q2);
                     }
                     if( q.transitions.ContainsKey(sym) )
-                        throw new Exception("BUG!");
+                        throw new Exception("BUG! in makeDFA");
                     q.transitions[sym] = statemap[lbl];
                 }
             }
+
+            I.calculateLookaheads();
         }//End makeDFA
 
         static Dictionary<string, HashSet<LRItem>> getOutGoingTransitions(DFAState q){
