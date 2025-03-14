@@ -11,27 +11,18 @@
 
     
             Grammar.check();
-            Grammar.computeNullableAndFirst();
-            //Grammar.dump();
-            
-            DFA.makeDFA();
-            DFA.dump();
 
+            if( args.Length == 1 && args[0] == "-g" ){
+                Grammar.computeNullableAndFirst();
+                //Grammar.dump();
+                DFA.makeDFA(); //time consuming
+                //DFA.dump();
+                TableWriter.create();
+                ParseTable.dump();
+                return;
+            }
             return;
-
-            bool verbose = false;
-
-            foreach(var item in args){
-                
-                if( verbose ){
-                    Console.WriteLine("*******************************");
-                    Console.WriteLine("OUTPUT FOR FILE: " + item);  //Writes what file we are outputting
-                    Console.WriteLine("*******************************");
-                }
-                 
-                
-
-                string inp = File.ReadAllText(item);
+            string inp = File.ReadAllText(args[0]);
                 var tokens = new List<Token>();
                 var T = new Tokenizer(inp);
                 while(true){
@@ -40,18 +31,18 @@
                         break;
                     tokens.Add(tok);
                 }
-                
-                Console.WriteLine("[");
+            
+
+                //build parse tree
+
                 foreach(var t in tokens){
                     Console.WriteLine(t);
-                    if( tokens.IndexOf(t) != tokens.Count - 1)
-                        Console.WriteLine(",");
                 }
-                Console.WriteLine("]");
+            
+            return;
+
             }
             
-            }
+        } //End class TheCompiler
 
-    } //End class TheCompiler
-
-} //End namespace
+    } //End namespace
