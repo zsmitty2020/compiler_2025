@@ -132,6 +132,12 @@ public class Token{
         this.lexeme = lexeme;
         this.line = line;
     }
+
+    public void toJson(StreamWriter w){
+        var lex = lexeme.Replace("\\","\\\\").Replace("\"","\\\"").Replace("\n","\\n");
+        w.WriteLine($"{{ \"sym\": \"{this.sym}\" , \"line\" : {this.line}, \"lexeme\" : \"{lex}\"  }}");
+    }
+
     public override string ToString()
     {
         var lex = lexeme.Replace("\\","\\\\").Replace("\"","\\\"").Replace("\n","\\n");
@@ -182,7 +188,7 @@ public class Tokenizer{
                 Console.WriteLine("NOT EMPTY STACK: " + nesting.Pop());
                 Environment.Exit(2);
             }
-            return null;
+            return new Token("$","",this.line);
         }
 
         var maxMamunch = -1;
@@ -218,33 +224,6 @@ public class Tokenizer{
             }
         }
 
-        
-
-        /*
-        //consume leading whitespace
-        while( this.index < this.input.Length && Char.IsWhiteSpace( this.input[this.index] ) && lexeme.Contains('\n')){
-            
-            //implicit semis
-            if( implicitSemiAfter.Contains(lastRealSym) && nesting.Count == 0){
-                if(verbose){Console.WriteLine(lastRealSym);}      //print
-                var tmptok = new Token( "SEMI" , "", line);
-                
-                if( this.input[this.index] == '\n' ){
-                    this.line++;}
-
-                this.index++;
-                
-                return tmptok;
-            }
-
-            if( this.input[this.index] == '\n' ){
-                this.line++;}
-            this.index++;
-
-        }
-        */
-
-
         if( sym == null ){
             //print error message
             Console.WriteLine("Error at line "+this.line);
@@ -256,10 +235,6 @@ public class Tokenizer{
         if( verbose ){
             Console.WriteLine("GOT TOKEN: "+tok);
         }
-    
-        //FIXME: Do maintenance on nesting stack
-        // if LPAREN or LBRACKET: push to stack
-        // if RPAREN or RBRACKET: pop from stack (first do checks!)
         
         if(sym == "LPAREN" || sym == "LBRACKET"){
             nesting.Push(tok);
