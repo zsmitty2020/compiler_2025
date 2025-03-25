@@ -165,19 +165,17 @@ public class Tokenizer{
     }
 
     //we can insert an implicit semicolon after these things
+    
     List<string> implicitSemiAfter = new(){"NUM","RPAREN","BOOLCONST","BREAK",
                                             "CONTINUE", "FNUM", "PLUSPLUS", "RBRACE",
                                             "RBRACKET", "RETURN", "STRINGCONST", "TYPE", "ID"
                                             };
+        
 
     public Token next(){
 
         String sym=null;
         String lexeme=null;
-
-
-
-        
 
         //If we've exhausted the input, return EOF
         if( this.index >= this.input.Length ){

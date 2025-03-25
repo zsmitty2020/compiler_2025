@@ -4,7 +4,7 @@
         public static void Main(string[] args){
 
             //initialize our grammar
-            //Terminals.makeThem();
+            Terminals.makeThem();
             
             Productions.makeThem();
             Grammar.addWhitespace();
@@ -18,33 +18,15 @@
                 DFA.makeDFA(); //time consuming
                 //DFA.dump();
                 TableWriter.create();
-                //ParseTable.dump();
+                ParseTable.dump();
                 return;
             }
-
             TreeNode root = null;
             string inp = File.ReadAllText(args[0]);
             var tokens = new List<Token>();
             var T = new Tokenizer(inp);
             root = Parser.parse(T);
-            root.print();
-
-            while(true){
-                Token tok = T.next();
-                
-                if( tok.sym == "$" )
-                    break;
-                tokens.Add(tok);
-            }
-            
-            using(var w = new StreamWriter("tree.json"))
-                root.toJson(w);
-            //build parse tree
-            
-            foreach(var t in tokens){
-                Console.WriteLine(t);
-            }
-            
+            root.collectClassNames();
             return;
 
             }

@@ -11,11 +11,24 @@ namespace lab{
 
         public TreeNode parent = null;
 
+        Production production {
+            get {
+                if( this.productionNumber >= 0 )
+                    return Grammar.productions[this.productionNumber];
+                return null;
+            }
+        }
+
         public TreeNode(string sym, Token tok, int prodNum){
             this.sym=sym;
             this.token = tok;
             this.productionNumber = prodNum;
         }
+
+        public void collectClassNames(){
+            this.production?.pspec.collectClassNames(this);
+        }
+        
 
         //nonterminal node
         public TreeNode(string sym, int prodNum) : this(sym,null,prodNum){}
