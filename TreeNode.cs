@@ -1,15 +1,30 @@
+using System.Text.Json.Serialization;
+
 namespace lab{
 
     public class TreeNode{
         public string sym;  //terminal name or nonterminal
                             //"NUM", "cond"
         public Token token = null; //only meaningful for terminals
-
         public List<TreeNode> children = new();
-
         public int productionNumber;
 
+        [JsonIgnore]
         public TreeNode parent = null;
+
+        [JsonConverter(typeof(NodeTypeJsonConverter))]
+        public NodeType nodeType = null;
+
+        public TreeNode this[string childSym] {
+            get {
+                foreach( var c in this.children ){
+                    if( c.sym == childSym ){
+                        return c;
+                    }
+                }
+                throw new Exception("No such child");
+            }
+        }
 
         Production production {
             get {
@@ -27,6 +42,10 @@ namespace lab{
 
         public void collectClassNames(){
             this.production?.pspec.collectClassNames(this);
+        }
+
+        public void setNodeTypes(){
+            this.production?.pspec.setNodeTypes(this);
         }
         
 
@@ -49,7 +68,7 @@ namespace lab{
         public void toJson(StreamWriter w){
             w.WriteLine("{");
             w.WriteLine( $"\t\"sym\" : \"{this.sym}\",");
-            
+            w.WriteLine( $"\t\"nodeType\" : \"{this.nodeType}\",");
             if(this.token == null){
                 
             }
@@ -107,8 +126,12 @@ namespace lab{
         public override string ToString(){
             if( this.token == null )
                 return this.sym;
-            else
-                return $"{this.sym} ({this.token.lexeme})";
+            else{
+                string tmp = "";
+                if( this.nodeType != null )
+                    tmp = this.nodeType.ToString();
+                return $"{this.sym} ({this.token.lexeme}) {tmp}";
+            }
         }
 
     } //end TreeNode
