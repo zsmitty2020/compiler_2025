@@ -137,6 +137,12 @@ def compare(expected, actual, depth):
         print("Got:     ",actual["sym"],"with",len(actual["children"]),"children (",ac,")")
         return False
 
+    if expected["varInfo"] != actual["varInfo"]:
+        print("varInfo mismatch in node with symbol",expected["sym"])
+        print("Expected:",expected["varInfo"])
+        print("Got:     ",actual["varInfo"])
+        return False
+
     for i in range(len(expected["children"])):
         if not compare( expected["children"][i], actual["children"][i], depth+1):
             return False

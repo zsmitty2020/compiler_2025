@@ -12,6 +12,10 @@ namespace lab{
         [JsonIgnore]
         public TreeNode parent = null;
 
+        //only meaningful for tree nodes that are ID's and
+        //which are variables
+        public VarInfo varInfo = null;
+
         [JsonConverter(typeof(NodeTypeJsonConverter))]
         public NodeType nodeType = null;
 
@@ -68,25 +72,34 @@ namespace lab{
         public void toJson(StreamWriter w){
             w.WriteLine("{");
             w.WriteLine( $"\t\"sym\" : \"{this.sym}\",");
-            w.WriteLine( $"\t\"nodeType\" : \"{this.nodeType}\",");
+            if(this.nodeType == null){
+                w.WriteLine($"\t\"nodeType\" : null,");
+            }
+            else
+                w.WriteLine( $"\t\"nodeType\" : \"{this.nodeType}\",");
             if(this.token == null){
                 
             }
-            
             else{
-                w.Write( $"\"token\" : ");
-                Console.WriteLine(this.token);
+                w.Write( $"\t\"token\" : ");
                 this.token.toJson(w);
                 w.WriteLine(",");
             }
             
-            w.WriteLine( "\"children\": [");
+            w.WriteLine( "\t\t\"children\" : [");
             for(int i=0;i<this.children.Count;i++){
                 this.children[i].toJson(w);
                 if( i != this.children.Count-1)
                     w.WriteLine(",");
             }
-            w.WriteLine("]");
+            w.WriteLine("\t\t\t\t\t],");
+            if(this.varInfo == null){
+                w.WriteLine($"\t\"varInfo\" : null");
+            }
+            else{
+                w.WriteLine($"\t\"varInfo\" : ");
+                this.varInfo.toJson(w);
+            }
             //w.WriteLine( $"\"productionNumber\" : \"{this.productionNumber}\",");
             w.WriteLine("}");
         }
@@ -124,14 +137,41 @@ namespace lab{
         }
 
         public override string ToString(){
-            if( this.token == null )
-                return this.sym;
-            else{
-                string tmp = "";
-                if( this.nodeType != null )
-                    tmp = this.nodeType.ToString();
-                return $"{this.sym} ({this.token.lexeme}) {tmp}";
+            string tmp=this.sym;
+        
+            if( this.token != null )
+                tmp += $" ({this.token.lexeme})";
+
+            if( this.nodeType != null )
+                tmp += " "+this.nodeType.ToString();
+
+            if( this.varInfo != null )
+                tmp += " "+this.varInfo;
+
+            return tmp;
+        }
+
+        public void removeUnitProductions(){
+
+            for(int i=0;i<this.children.Count;++i)
+                this.children[i].removeUnitProductions();
+
+            if( this.children.Count == 1 && this.parent != null){
+                this.parent.replaceChild(this, this.children[0] );
             }
+        }
+
+        public void replaceChild( TreeNode n, TreeNode c){
+            //replace child n with c
+            for(int i=0;i<this.children.Count;++i){
+                if( this.children[i] == n ){
+                    this.children[i] = c;
+                    c.parent=this;
+                    n.parent=null;
+                    return;
+                }
+            }
+            throw new Exception();
         }
 
     } //end TreeNode

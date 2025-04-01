@@ -135,7 +135,7 @@ public class Token{
 
     public void toJson(StreamWriter w){
         var lex = lexeme.Replace("\\","\\\\").Replace("\"","\\\"").Replace("\n","\\n");
-        w.WriteLine($"{{ \"sym\": \"{this.sym}\" , \"line\" : {this.line}, \"lexeme\" : \"{lex}\"  }}");
+        w.Write($"{{ \"sym\": \"{this.sym}\" , \"line\" : {this.line}, \"lexeme\" : \"{lex}\"  }}");
     }
 
     public override string ToString()

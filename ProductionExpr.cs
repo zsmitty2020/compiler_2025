@@ -150,8 +150,6 @@ public class ProductionsExpr{
             //indivisible atom
             new("factor :: NUM",
                 setNodeTypes: (n) => {
-                    //demo: one way to set node type (for another way,
-                    //see FNUM)
                     n.nodeType = NodeType.Int;
                 }
             ),
@@ -161,11 +159,16 @@ public class ProductionsExpr{
                     n.nodeType = n["expr"].nodeType;
                 }
             ),
-            new("factor :: ID"),
+            new("factor :: ID",
+                setNodeTypes: (n) => {
+                    var tok = n.children[0].token;
+                    VarInfo vi =  SymbolTable.lookup(tok);
+                    n["ID"].varInfo = vi;
+                    n["ID"].nodeType = n.nodeType = vi.type;
+                }
+            ),
             new("factor :: FNUM",
                 setNodeTypes: (n) => {
-                    //demo: The other way to set node type (see
-                    //NUM for the first way)
                     n.nodeType = NodeType.Float;
                 }
             ),

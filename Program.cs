@@ -29,17 +29,20 @@
             root = Parser.parse(T);
             root.collectClassNames();
             root.setNodeTypes();
+
+            root.removeUnitProductions();     
             root.print();
 
-
+            /*
             //debug output: Write the tree in JSON format
             var opts = new System.Text.Json.JsonSerializerOptions();
             opts.IncludeFields=true;
             opts.WriteIndented=true;
             opts.MaxDepth=1000000;
             string J = System.Text.Json.JsonSerializer.Serialize(root,opts);
+            */
             using(var w = new StreamWriter("tree.json")){
-                w.WriteLine(J);
+                root.toJson(w);
             }
             return;
 
