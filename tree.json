@@ -1,0 +1,213 @@
+{
+	"sym" : "S",
+	"token" : null,
+	"productionNumber" : 0,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "decls",
+	"token" : null,
+	"productionNumber" : 1,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "funcdecl",
+	"token" : null,
+	"productionNumber" : 6,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "FUNC",
+	"token" : { "sym": "FUNC" , "line" : 1, "lexeme" : "func"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "ID",
+	"token" : { "sym": "ID" , "line" : 1, "lexeme" : "main"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "LPAREN",
+	"token" : { "sym": "LPAREN" , "line" : 1, "lexeme" : "("  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "optionalPdecls",
+	"token" : null,
+	"productionNumber" : 12,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "RPAREN",
+	"token" : { "sym": "RPAREN" , "line" : 1, "lexeme" : ")"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "optionalReturn",
+	"token" : null,
+	"productionNumber" : 8,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "LBRACE",
+	"token" : { "sym": "LBRACE" , "line" : 1, "lexeme" : "{"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "stmts",
+	"token" : null,
+	"productionNumber" : 24,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "return",
+	"token" : null,
+	"productionNumber" : 37,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "RETURN",
+	"token" : { "sym": "RETURN" , "line" : 2, "lexeme" : "return"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "bitexp",
+	"token" : null,
+	"productionNumber" : 50,
+	"nodeType" : "int",
+		"children" : [
+{
+	"sym" : "NUM",
+	"token" : { "sym": "NUM" , "line" : 2, "lexeme" : "10"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "BITOP",
+	"token" : { "sym": "BITOP" , "line" : 2, "lexeme" : "^"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "NUM",
+	"token" : { "sym": "NUM" , "line" : 2, "lexeme" : "3"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "SEMI",
+	"token" : { "sym": "SEMI" , "line" : 2, "lexeme" : ""  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "stmts",
+	"token" : null,
+	"productionNumber" : 26,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "RBRACE",
+	"token" : { "sym": "RBRACE" , "line" : 3, "lexeme" : "}"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "SEMI",
+	"token" : { "sym": "SEMI" , "line" : 3, "lexeme" : ""  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "decls",
+	"token" : null,
+	"productionNumber" : 5,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}

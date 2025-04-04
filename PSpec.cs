@@ -9,15 +9,19 @@ namespace lab{
 
         public WalkCallbackType collectClassNames;
         public WalkCallbackType setNodeTypes;
+        public WalkCallbackType generateCode;
 
         //p = "foo :: bar baz bam | boom"
         public PSpec(string p, 
                     WalkCallbackType collectClassNames=null,
-                    WalkCallbackType setNodeTypes = null
+                    WalkCallbackType setNodeTypes = null,
+                    WalkCallbackType generateCode=null
         ){
             this.spec=p;
             this.collectClassNames = collectClassNames ?? defaultCollectClassNames;
             this.setNodeTypes = setNodeTypes ?? defaultSetNodeTypes;
+            this.generateCode = generateCode ?? defaultGenerateCode;
+
             // if( collectClassNames != null )
             //     this.collectClassNames = collectClassNames;
             // else
@@ -35,6 +39,12 @@ namespace lab{
             }
             if( n.children.Count == 1 && n.children[0].nodeType != null && n.nodeType == null )
                 n.nodeType = n.children[0].nodeType;
+        }
+
+        void defaultGenerateCode(TreeNode n){
+            foreach(TreeNode c in n.children){
+                c.generateCode();
+            }
         }
 
     }

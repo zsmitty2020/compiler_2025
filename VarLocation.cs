@@ -6,8 +6,12 @@ namespace lab{
 
 
     public class GlobalLocation : VarLocation{
+        public Label lbl;
+        public GlobalLocation(Label lbl){
+            this.lbl = lbl;
+        }
         public override string ToString(){
-            return "\"storageClass\": \"global\"";
+            return $"\"storageClass\": \"global {lbl}\"";
         }
     }
 

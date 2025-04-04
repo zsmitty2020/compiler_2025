@@ -74,7 +74,18 @@ public class VoidNodeType : NodeType {
     public VoidNodeType() : base("void") {}
 }
 
+public class FunctionNodeType: NodeType {
+    public FunctionNodeType(): base("func") {}
 
+    public override bool Equals(Object o){
+        throw new Exception("TBD");
+    }
+
+    public override int GetHashCode()
+    {
+        throw new Exception("TBD");
+    }
+}
 public class NodeTypeJsonConverter : JsonConverter<NodeType> {
 
     public NodeTypeJsonConverter(){}

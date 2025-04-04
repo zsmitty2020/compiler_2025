@@ -10,19 +10,29 @@ import os.path
 import subprocess
 import json
 import sys
+import struct 
+import re
 
-
+divrex = re.compile(r"\d+\s*/\d+")
 def main():
     global EXE
     stopOnFirstFail=True
 
     base = os.path.abspath(os.path.dirname(__file__))
-
+    verbose=False
+    skip=0
+    
     i=1
     while i < len(sys.argv):
-        if sys.argv[i] == "--stop":
+        if sys.argv[i] in ["-k", "--stop"]:
             stopOnFirstFail=True
             sys.argv.pop(i)
+        elif sys.argv[i] in ["-v","--verbose"]:
+            verbose=True
+            sys.argv.pop(i)
+        elif sys.argv[i] in ["-s","--skip"]:
+            sys.argv.pop(i)
+            skip=int(sys.argv.pop(i))
         else:
             i+=1
 
@@ -35,7 +45,7 @@ def main():
 
     numtests = 0
     alltests=[]
-    for dirpath,dirs,files in os.walk(f"{base}/tests/inputs"):
+    for dirpath,dirs,files in os.walk(f"{base}/tests"):
         for f in files:
             if f.endswith(".txt"):
                 alltests.append( (dirpath,f) )
@@ -44,110 +54,93 @@ def main():
 
     numpassed=0
     numfailed=0
-
+    numignored=0
+    
+    def good():
+        nonlocal numpassed,numfailed
+        numpassed+=1
+        print("OK!")
+    def bad(reason):
+        nonlocal numpassed,numfailed
+        numfailed+=1
+        print("BAD!",reason)
+        if stopOnFirstFail:
+            sys.exit(1)
+    def ignored():
+        nonlocal numignored
+        numignored+=1
+        
     for dirpath,f in alltests:
+        if skip>0:
+            skip-=1
+            continue
+
         print("Testing",f,"...")
 
-        resultfile = f"{base}/tests/outputs/{f}"
+        with open(f"{dirpath}/{f}") as fp:
+            idata = fp.read()
+        data=idata
+        i = data.find("return")
+        data = data[i+6:]
+        data = data.split("\n")[0]
+        i = data.find("//")
+        if i != -1:
+            data = data[:i]
+        data=data.strip()
+        
+        
+        if verbose:
+            print(idata)
+            print("~"*40)
 
-        try:
-            os.unlink("tree.json")
-        except FileNotFoundError:
-            pass
 
-        exitcode = run(f"{base}/tests/inputs/{f}")
-
-        print("Parser finished with",f)
-
-        with open(resultfile) as fp:
-            try:
-                expected = json.load(fp)
-            except json.JSONDecodeError as e:
-                print("Error in test harness file",resultfile)
-                print("Badly formatted: At line",e.lineno," column",e.colno,":",e.msg)
-                return
-
-        if os.path.exists("tree.json"):
-            with open("tree.json") as fp:
-                actual = json.load(fp)
+        isBonus=False
+        expected = (eval(data))
+        if divrex.match(data):
+            expected = int(expected)
         else:
-            actual=None
-
-
-        if expected["returncode"] == 0:
-            if exitcode != 0:
-                print("Parser returned an error, but it should have parsed the file successfully")
-                numfailed+=1
-            else:
-                if compare(expected["tree"],actual,0):
-                    print("OK!")
-                    numpassed += 1
-                else:
-                    numfailed += 1
+            if type(expected) == float:
+                isBonus=True
+                expected = struct.unpack( "Q", struct.pack( "d", expected ) )[0]
+        expected = expected & 0xffffffff
+        
+        if verbose:
+            print(expected)
+            print("="*40)
+        
+        
+        compiledok = run(EXE,f"{dirpath}/{f}")
+        if compiledok != 0:
+            bad("Compiler rejected input, but it should not have")
+        exitcode = run("./out.exe")
+        print("Got exit code",exitcode)
+        
+        acceptable = [expected,expected&0xff]
+        if exitcode in acceptable:
+            good()
+        elif isBonus:
+            ignored()
         else:
-            if exitcode == 0:
-                print("Parser accepted the file, but it should have returned an error")
-                numfailed+=1
-            else:
-                numpassed += 1
-        #endif
-
-        if stopOnFirstFail and numfailed>0:
-            print("At least one test failed. Stopping.")
-            break
+            tmp = [str(q) for q in acceptable]
+            tmp = ", ".join(tmp)
+            bad("Expected return code to be one of: "+tmp)
+                
     #end loop
 
-    numtests = numpassed + numfailed
+    numtests = numpassed + numfailed + numignored
     if numtests == 0 :
         print("Did not run any tests?!")
         return
 
     print(numpassed,"of",numtests,"tests passed OK")
     print(numfailed,"of",numtests,"tests failed")
+    print(numignored,"of",numtests,"tests ignored (bonus, but not correct)")
 
     return
 
-def run(fname):
-    cmd = [EXE,fname]
+def run(*cmd):
     P = subprocess.run(cmd)
     return P.returncode
 
-def compare(expected, actual, depth):
-
-    if expected["sym"] != actual["sym"]:
-        print("At tree depth",depth,": Symbol mismatch")
-        print("Expected:",expected["sym"])
-        print("Got:     ",actual["sym"])
-        return False
-
-    #ignore types for terminals
-    if expected["sym"].upper() != expected["sym"] and expected["nodeType"] != actual["nodeType"]:
-        print("At tree depth",depth,": Type mismatch")
-        print("Expected:",expected["nodeType"])
-        print("Got:     ",actual["nodeType"])
-        return False
-
-    if len(expected["children"]) != len(actual["children"]):
-        print("At tree depth",depth,": Children length mismatch")
-        ec = [ q["sym"] for q in expected["children"] ]
-        ec = ",".join(ec)
-        ac = [ q["sym"] for q in actual["children"] ]
-        ac = ",".join(ac)
-        print("Expected:",expected["sym"],"with",len(expected["children"]),"children (",ec,")")
-        print("Got:     ",actual["sym"],"with",len(actual["children"]),"children (",ac,")")
-        return False
-
-    if expected["varInfo"] != actual["varInfo"]:
-        print("varInfo mismatch in node with symbol",expected["sym"])
-        print("Expected:",expected["varInfo"])
-        print("Got:     ",actual["varInfo"])
-        return False
-
-    for i in range(len(expected["children"])):
-        if not compare( expected["children"][i], actual["children"][i], depth+1):
-            return False
-    return True
-
-
 main()
-input("Press 'enter' to quit")
+#input("Press 'enter' to quit")

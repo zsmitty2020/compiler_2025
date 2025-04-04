@@ -51,6 +51,9 @@ namespace lab{
         public void setNodeTypes(){
             this.production?.pspec.setNodeTypes(this);
         }
+        public void generateCode(){
+            this.production?.pspec.generateCode(this);
+        }
         
 
         //nonterminal node
@@ -72,20 +75,21 @@ namespace lab{
         public void toJson(StreamWriter w){
             w.WriteLine("{");
             w.WriteLine( $"\t\"sym\" : \"{this.sym}\",");
+            w.Write( $"\t\"token\" : ");
+            if(this.token == null){
+                w.Write("null");
+            }
+            else{
+                this.token.toJson(w);
+            }
+            w.WriteLine(",");
+            w.WriteLine( $"\t\"productionNumber\" : {this.productionNumber},");
             if(this.nodeType == null){
                 w.WriteLine($"\t\"nodeType\" : null,");
             }
-            else
-                w.WriteLine( $"\t\"nodeType\" : \"{this.nodeType}\",");
-            if(this.token == null){
-                
-            }
             else{
-                w.Write( $"\t\"token\" : ");
-                this.token.toJson(w);
-                w.WriteLine(",");
+                w.WriteLine( $"\t\"nodeType\" : \"{this.nodeType}\",");
             }
-            
             w.WriteLine( "\t\t\"children\" : [");
             for(int i=0;i<this.children.Count;i++){
                 this.children[i].toJson(w);
@@ -100,7 +104,7 @@ namespace lab{
                 w.WriteLine($"\t\"varInfo\" : ");
                 this.varInfo.toJson(w);
             }
-            //w.WriteLine( $"\"productionNumber\" : \"{this.productionNumber}\",");
+            
             w.WriteLine("}");
         }
 

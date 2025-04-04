@@ -43,6 +43,23 @@ public class ProductionsExpr{
             new("bitexp :: bitexp BITOP shiftexp",
                 setNodeTypes: (n) => {
                     Utils.typeCheck(n,NodeType.Int, NodeType.Int);
+                },
+                generateCode: (n) => {
+                    n["bitexp"].generateCode();
+                    n["shiftexp"].generateCode();
+    
+                    Asm.add(new OpPop(Register.rcx,null));
+                    Asm.add(new OpPop(Register.rax,null));
+                    if( n["BITOP"].token.lexeme == "&" ){
+                        Asm.add(new OpAnd(Register.rax, Register.rcx));
+                    }
+                    if( n["BITOP"].token.lexeme == "|" ){
+                        Asm.add(new OpOr(Register.rax, Register.rcx));
+                    }
+                    if( n["BITOP"].token.lexeme == "^" ){
+                        Asm.add(new OpXor(Register.rax, Register.rcx));
+                    }
+                    Asm.add( new OpPush( Register.rax, StorageClass.PRIMITIVE));
                 }
             ),
             new("bitexp :: shiftexp"),
@@ -50,6 +67,23 @@ public class ProductionsExpr{
             new("shiftexp :: shiftexp SHIFTOP sumexp",
                 setNodeTypes: (n) => {
                     Utils.typeCheck(n,NodeType.Int, NodeType.Int);
+                },
+                generateCode: (n) => {
+                    //ex: 4 << 2
+                    //ex: 4
+                    n["shiftexp"].generateCode();
+                    //ex: 2
+                    n["sumexp"].generateCode();
+    
+                    Asm.add(new OpPop(Register.rcx,null));      //ex: 2
+                    Asm.add(new OpPop(Register.rax,null));      //ex: 4
+                    if( n["SHIFTOP"].token.lexeme == "<<" ){
+                        Asm.add(new OpShl(Register.rax, Register.rcx));
+                    }
+                    if( n["SHIFTOP"].token.lexeme == ">>" ){
+                        Asm.add(new OpShr(Register.rax, Register.rcx));
+                    }
+                    Asm.add( new OpPush( Register.rax, StorageClass.PRIMITIVE));
                 }
             ),
             new("shiftexp :: sumexp"),
@@ -76,6 +110,51 @@ public class ProductionsExpr{
                         Utils.error(addop,"Cannot subtract strings");
 
                     n.nodeType = t1;
+                },
+                generateCode: (n) => {
+                    if( n.nodeType == NodeType.Int ){
+                        // 2 + 1 or 2 - 1
+                        n["sumexp"].generateCode(); // 1
+                        n["prodexp"].generateCode();// 2
+
+                        Asm.add(new OpPop( Register.rbx, null));
+                        Asm.add(new OpPop( Register.rax, null));
+                        
+                        //Addition
+                        if( n["ADDOP"].token.lexeme == "+"){
+                            Asm.add(new OpAdd( Register.rax, Register.rbx));
+                        }
+
+                        //Subtraction
+                        if( n["ADDOP"].token.lexeme == "-"){
+                            Asm.add(new OpSub( Register.rax, Register.rbx));
+                        }
+                        Asm.add(new OpPush( Register.rax, StorageClass.PRIMITIVE ));
+
+                        if( n["ADDOP"].token.lexeme != "+" && n["ADDOP"].token.lexeme != "-"){
+                            throw new Exception("ADDOP NOT + OR -!");
+                        }
+
+                    }
+                    else{
+                        n["sumexp"].generateCode(); // 1
+                        n["prodexp"].generateCode();// 2
+
+                        Asm.add(new OpPopF( Register.xmm1, null));
+                        Asm.add(new OpPopF( Register.xmm0, null));
+                        
+                        //Addition
+                        if( n["ADDOP"].token.lexeme == "+"){
+                            Asm.add(new OpAddF( Register.xmm0, Register.xmm1));
+                        }
+
+                        //Subtraction
+                        if( n["ADDOP"].token.lexeme == "-"){
+                            Asm.add(new OpSubF( Register.xmm0, Register.xmm1));
+                        }
+                        Asm.add(new OpPushF( Register.xmm0, StorageClass.PRIMITIVE ));
+                    }
+                    
                 }
             ),
             new("sumexp :: prodexp"),
@@ -84,7 +163,46 @@ public class ProductionsExpr{
             new("prodexp :: prodexp MULOP powexp",
                 setNodeTypes: (n) => {
                     Utils.typeCheck(n,null, NodeType.Int, NodeType.Float);
-                }),
+                },
+                generateCode: (n) => {
+                    if( n.nodeType == NodeType.Int ){
+                        n["prodexp"].generateCode();
+                        n["powexp"].generateCode();
+                        Asm.add(new OpPop( Register.rbx, null));
+                        Asm.add(new OpPop( Register.rax, null));
+                        if( n["MULOP"].token.lexeme == "*"){
+                            Asm.add(new OpMul( Register.rax, Register.rbx));
+                            Asm.add(new OpPush(Register.rax, StorageClass.PRIMITIVE));
+                        }
+                        if( n["MULOP"].token.lexeme == "/"){
+                            Asm.add(new OpDiv( Register.rax, Register.rbx));
+                            //push remainder to stack
+                            Asm.add(new OpPush( Register.rax, StorageClass.PRIMITIVE ));
+                        }
+                        if( n["MULOP"].token.lexeme == "%"){
+                            Asm.add(new OpDiv( Register.rax, Register.rbx));
+                            //push remainder to stack
+                            Asm.add(new OpPush( Register.rdx, StorageClass.PRIMITIVE ));
+                        }
+                        
+                        
+                    } else if( n.nodeType == NodeType.Float ){
+                        n["prodexp"].generateCode();
+                        n["powexp"].generateCode();
+                        Asm.add(new OpPopF( Register.xmm1, null));
+                        Asm.add(new OpPopF( Register.xmm0, null));
+                        if( n["MULOP"].token.lexeme == "*"){
+                            Asm.add(new OpMulF( Register.xmm0, Register.xmm1));
+                            Asm.add(new OpPushF( Register.xmm0, StorageClass.PRIMITIVE));
+                        }
+                        if( n["MULOP"].token.lexeme == "/"){
+                            Asm.add(new OpDivF( Register.xmm0, Register.xmm1));
+                            Asm.add(new OpPushF( Register.xmm0, StorageClass.PRIMITIVE ));
+                        }
+                    }
+                
+                }
+            ),
             new("prodexp :: powexp"),
 
             //exponentiation
@@ -103,6 +221,12 @@ public class ProductionsExpr{
                         Utils.error(bitnotop,$"Type must be an Int! ({t1})");
                     }
                     n.nodeType = t1;
+                },
+                generateCode: (n) => {
+                    n["unaryexp"].generateCode();
+                    Asm.add(new OpPop(Register.rax,null));
+                    Asm.add(new OpNot(Register.rax));
+                    Asm.add(new OpPush(Register.rax,StorageClass.PRIMITIVE));
                 }
             ),
             new("unaryexp :: ADDOP unaryexp",
@@ -116,6 +240,32 @@ public class ProductionsExpr{
                         Utils.error(addop,$"Type must be an Int or Float! ({t1})");
                     }
                     n.nodeType = t1;
+                },
+                generateCode: (n) => {
+                    if( n.nodeType == NodeType.Int){
+                        if( n["ADDOP"].token.lexeme == "+" ){
+
+                            n["unaryexp"].generateCode();
+                        }
+                        if( n["ADDOP"].token.lexeme == "-" ){
+                            n["unaryexp"].generateCode();
+                            Asm.add(new OpPop(Register.rax,null));
+                            Asm.add(new OpNeg(Register.rax));
+                            Asm.add(new OpPush(Register.rax, StorageClass.PRIMITIVE));
+                        }
+                    }
+                    else{
+                        if( n["ADDOP"].token.lexeme == "+" ){
+                            n["unaryexp"].generateCode();
+                        }
+                        if( n["ADDOP"].token.lexeme == "-" ){
+                            n["unaryexp"].generateCode();
+                            Asm.add(new OpPop(Register.rax, null));
+                            Asm.add(new OpMov(0x8000000000000000, Register.rbx));
+                            Asm.add(new OpXor(Register.rax, Register.rbx));
+                            Asm.add(new OpPush( Register.rax, StorageClass.PRIMITIVE));
+                        }
+                    }
                 }
             ),
             new("unaryexp :: NOTOP unaryexp",
@@ -151,12 +301,22 @@ public class ProductionsExpr{
             new("factor :: NUM",
                 setNodeTypes: (n) => {
                     n.nodeType = NodeType.Int;
+                },
+                generateCode: (n) => {
+                    //make code for factor
+                    string s = n["NUM"].token.lexeme;
+                    long value = Int64.Parse(s);
+                    Asm.add( new OpMov(value, Register.rax));
+                    Asm.add( new OpPush(Register.rax, StorageClass.PRIMITIVE));
                 }
             ),
             new("factor :: LPAREN expr RPAREN",
                 setNodeTypes: (n) => {
                     n["expr"].setNodeTypes();
                     n.nodeType = n["expr"].nodeType;
+                },
+                generateCode: (n) => {
+                    throw new Exception("FINISH ME");
                 }
             ),
             new("factor :: ID",
@@ -170,6 +330,13 @@ public class ProductionsExpr{
             new("factor :: FNUM",
                 setNodeTypes: (n) => {
                     n.nodeType = NodeType.Float;
+                },
+                generateCode: (n) =>{
+                    string s = n["FNUM"].token.lexeme;
+                    double value = Double.Parse(s);
+                    long ivalue = BitConverter.DoubleToInt64Bits(value);
+                    Asm.add( new OpMov(ivalue, Register.rax));
+                    Asm.add( new OpPush(Register.rax, StorageClass.PRIMITIVE));
                 }
             ),
             new("factor :: STRINGCONST",

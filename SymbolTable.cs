@@ -63,6 +63,13 @@ namespace lab{
                 Environment.Exit(1);
             return null;
         }
+        public static VarInfo lookup(string id){
+            if( table.ContainsKey(id) )
+                return table[id];
+            else
+                Environment.Exit(1);
+            return null;
+        }
 
         public static void declareGlobal(Token token, NodeType type){
             string varname = token.lexeme;
@@ -71,7 +78,7 @@ namespace lab{
             }
             table[varname] = new VarInfo(token,
                 nestingLevel, //always zero
-                type, new GlobalLocation());
+                type, new GlobalLocation( new Label(token.lexeme) ));
         }
         public static void declareLocal(Token token, NodeType type){
             string varname = token.lexeme;

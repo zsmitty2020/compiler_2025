@@ -30,6 +30,13 @@
             root.collectClassNames();
             root.setNodeTypes();
 
+            root.generateCode();
+
+            using(var w = new StreamWriter("out.asm")){
+                Asm.output(w);
+            }
+            Run.compile("out.asm");
+
             root.removeUnitProductions();     
             root.print();
 
