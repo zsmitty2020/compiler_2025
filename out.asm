@@ -8,17 +8,19 @@ _start:
     call ExitProcess
 lbl0:      /* main */
     /* Return at line 2 */
-    movq $10, %rax    /*  */
+    movq $3, %rax    /*  */
     push %rax  /* value */
     push $0  /* storage class PRIMITIVE*/
     movq $3, %rax    /*  */
     push %rax  /* value */
     push $0  /* storage class PRIMITIVE*/
     add $8, %rsp   /* discard storage class */
-    pop %rcx  /* value */
+    pop %rbx  /* value */
     add $8, %rsp   /* discard storage class */
     pop %rax  /* value */
-    xor %rcx, %rax
+    cmp %rbx, %rax
+    setne %al
+    movzx %al, %rax
     push %rax  /* value */
     push $0  /* storage class PRIMITIVE*/
     add $8, %rsp   /* discard storage class */

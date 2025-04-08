@@ -109,14 +109,14 @@
 }
 ,
 {
-	"sym" : "bitexp",
+	"sym" : "relexp",
 	"token" : null,
-	"productionNumber" : 50,
-	"nodeType" : "int",
+	"productionNumber" : 48,
+	"nodeType" : "bool",
 		"children" : [
 {
 	"sym" : "NUM",
-	"token" : { "sym": "NUM" , "line" : 2, "lexeme" : "10"  },
+	"token" : { "sym": "NUM" , "line" : 2, "lexeme" : "3"  },
 	"productionNumber" : -1,
 	"nodeType" : null,
 		"children" : [
@@ -125,8 +125,8 @@
 }
 ,
 {
-	"sym" : "BITOP",
-	"token" : { "sym": "BITOP" , "line" : 2, "lexeme" : "^"  },
+	"sym" : "RELOP",
+	"token" : { "sym": "RELOP" , "line" : 2, "lexeme" : "!="  },
 	"productionNumber" : -1,
 	"nodeType" : null,
 		"children" : [

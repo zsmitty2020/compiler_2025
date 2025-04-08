@@ -10,29 +10,22 @@ import os.path
 import subprocess
 import json
 import sys
-import struct 
-import re
 
-divrex = re.compile(r"\d+\s*/\d+")
+
 def main():
     global EXE
     stopOnFirstFail=True
+    failed = False
 
     base = os.path.abspath(os.path.dirname(__file__))
-    verbose=False
-    skip=0
-    
+
+    verbose=True
+
     i=1
     while i < len(sys.argv):
-        if sys.argv[i] in ["-k", "--stop"]:
-            stopOnFirstFail=True
-            sys.argv.pop(i)
-        elif sys.argv[i] in ["-v","--verbose"]:
-            verbose=True
-            sys.argv.pop(i)
-        elif sys.argv[i] in ["-s","--skip"]:
-            sys.argv.pop(i)
-            skip=int(sys.argv.pop(i))
+        if sys.argv[i] == '-q':
+            verbose=False
+            del sys.argv[i]
         else:
             i+=1
 
@@ -47,100 +40,82 @@ def main():
     alltests=[]
     for dirpath,dirs,files in os.walk(f"{base}/tests"):
         for f in files:
-            if f.endswith(".txt"):
+            if f.endswith(".txt") and "expected" not in f:
                 alltests.append( (dirpath,f) )
 
     alltests.sort()
 
-    numpassed=0
-    numfailed=0
-    numignored=0
-    
-    def good():
-        nonlocal numpassed,numfailed
-        numpassed+=1
-        print("OK!")
-    def bad(reason):
-        nonlocal numpassed,numfailed
-        numfailed+=1
-        print("BAD!",reason)
-        if stopOnFirstFail:
-            sys.exit(1)
-    def ignored():
-        nonlocal numignored
-        numignored+=1
-        
-    for dirpath,f in alltests:
-        if skip>0:
-            skip-=1
-            continue
+    stats = {
+        "boolean": [0,0],
+        "float": [0,0],
+        "int": [0,0]
+    }
 
+
+    for dirpath,f in alltests:
+        if stopOnFirstFail:
+            if failed:
+                break
         print("Testing",f,"...")
 
-        with open(f"{dirpath}/{f}") as fp:
-            idata = fp.read()
-        data=idata
-        i = data.find("return")
-        data = data[i+6:]
-        data = data.split("\n")[0]
-        i = data.find("//")
-        if i != -1:
-            data = data[:i]
-        data=data.strip()
-        
-        
-        if verbose:
-            print(idata)
-            print("~"*40)
+        kind = f.split("-")[0]
+
+        compilerstatus, exestatus = run(f"{base}/tests/{f}",verbose)
+
+        expfile = f.replace(".txt",".expected.txt")
+        expfile = os.path.join(dirpath,expfile)
+
+        with open(expfile) as fp:
+            expected = fp.read().strip()
+
+        if expected == "invalid":
+            if compilerstatus == 0:
+                print("Compiler accepted invalid input [BAD]")
+                failed = True
+                stats[kind][1]+=1
+            else:
+                print("Compiler rejected invalid input [OK]")
+                stats[kind][0] += 1
+        else:
+            if expected == "True":
+                expected = 1
+            elif expected == "False":
+                expected = 0
+            else:
+                assert 0
+            if compilerstatus != 0:
+                print("Compiler rejected valid input [BAD]")
+                failed = True
+                stats[kind][1] += 1
+            else:
+                if exestatus != expected:
+                    print(f"Executable returned {exestatus} but it should have returned {expected} [BAD]")
+                    failed = True
+                    stats[kind][1] += 1
+                else:
+                    print("OK!")
+                    stats[kind][0] += 1
 
 
-        isBonus=False
-        expected = (eval(data))
-        if divrex.match(data):
-            expected = int(expected)
-        else:
-            if type(expected) == float:
-                isBonus=True
-                expected = struct.unpack( "Q", struct.pack( "d", expected ) )[0]
-        expected = expected & 0xffffffff
-        
-        if verbose:
-            print(expected)
-            print("="*40)
-        
-        
-        compiledok = run(EXE,f"{dirpath}/{f}")
-        if compiledok != 0:
-            bad("Compiler rejected input, but it should not have")
-        exitcode = run("./out.exe")
-        print("Got exit code",exitcode)
-        
-        acceptable = [expected,expected&0xff]
-        if exitcode in acceptable:
-            good()
-        elif isBonus:
-            ignored()
-        else:
-            tmp = [str(q) for q in acceptable]
-            tmp = ", ".join(tmp)
-            bad("Expected return code to be one of: "+tmp)
-                
     #end loop
 
-    numtests = numpassed + numfailed + numignored
-    if numtests == 0 :
-        print("Did not run any tests?!")
-        return
+    for kind in stats:
+        lbl=f"{kind} inputs:"
+        print(f"{lbl:20s}{stats[kind][0]} passed     {stats[kind][1]} failed")
 
-    print(numpassed,"of",numtests,"tests passed OK")
-    print(numfailed,"of",numtests,"tests failed")
-    print(numignored,"of",numtests,"tests ignored (bonus, but not correct)")
 
     return
 
-def run(*cmd):
-    P = subprocess.run(cmd)
-    return P.returncode
+def run(fname,verbose):
+    cmd = [EXE,fname]
+    P = subprocess.run(cmd, stdout=None if verbose else subprocess.DEVNULL,
+                            stderr=None if verbose else subprocess.DEVNULL)
+    compilerstatus =  P.returncode
+    if compilerstatus != 0:
+        return compilerstatus,None
+    P = subprocess.run( [os.path.join(".","out.exe")] )
+    exestatus = P.returncode
+    return compilerstatus,exestatus
 
 main()
 #input("Press 'enter' to quit")

@@ -34,8 +34,79 @@ public class ProductionsExpr{
             //relational: x>y
             new("relexp :: bitexp RELOP bitexp",
                 setNodeTypes: (n) => {
-                    Utils.typeCheck(n,NodeType.Bool, NodeType.Int, NodeType.Float, NodeType.String);
-                }
+                    Utils.typeCheck(n,NodeType.Bool, NodeType.Int, NodeType.Float, NodeType.String, NodeType.Bool);
+                },
+                generateCode: (n) => {
+                    n.children[0].generateCode();
+                    n.children[2].generateCode();
+
+                    var ntype = n["bitexp"].nodeType;
+                    if(ntype == NodeType.Int ) {
+
+                        //10<20
+                        Asm.add( new OpPop( Register.rbx, null ));  //20
+                        Asm.add( new OpPop( Register.rax, null ));  //10
+                        
+                        string cmp;
+                        switch(n["RELOP"].token.lexeme ){
+                            case ">":       cmp = "g"; break;
+                            case "<":       cmp = "l"; break;
+                            case ">=":       cmp = "ge"; break;
+                            case "<=":       cmp = "le"; break;
+                            case "==":       cmp = "e"; break;
+                            case "!=":       cmp = "ne"; break;
+                            default: Environment.Exit(90); cmp = ""; break;
+                        }
+                        Asm.add( new OpCmp(Register.rax, Register.rbx));
+                        Asm.add( new OpSetCC( cmp, Register.rax ));
+                        Asm.add( new OpPush( Register.rax, StorageClass.PRIMITIVE));
+
+                    } else if( ntype == NodeType.Bool){
+                        //true == false or false != false
+                        Asm.add( new OpPop( Register.rbx, null ));  //20
+                        Asm.add( new OpPop( Register.rax, null ));  //10
+                        
+                        string cmp;
+                        switch(n["RELOP"].token.lexeme ){
+                            case "==":       cmp = "e"; break;
+                            case "!=":       cmp = "ne"; break;
+                            default: Environment.Exit(91); cmp = ""; break;
+                        }
+                        Asm.add( new OpCmp(Register.rax, Register.rbx));
+                        Asm.add( new OpSetCC( cmp, Register.rax ));
+                        Asm.add( new OpPush( Register.rax, StorageClass.PRIMITIVE));
+                    }
+                    else if( ntype == NodeType.String) {
+                        //TBD later
+                        Console.WriteLine("NO STRINGS!");
+                        Environment.Exit(92);
+                    } else if( ntype == NodeType.Float ){
+                        //1.2 > 4.3
+                        Asm.add( new OpPopF( Register.xmm1, null ));  //4.3
+                        Asm.add( new OpPopF( Register.xmm0, null ));  //1.2
+                        
+                        string cmp;
+                        switch(n["RELOP"].token.lexeme ){
+                            case "<":       cmp = "lt"; break;
+                            case "<=":       cmp = "le"; break;
+                            case ">":       cmp = "nle"; break;
+                            case ">=":       cmp = "nlt"; break;
+                            case "==":       cmp = "eq"; break;
+                            case "!=":       cmp = "neq"; break;
+                            default: Environment.Exit(93); cmp = ""; break;
+                        }
+                        Asm.add( new OpCmpF(cmp, Register.xmm0, Register.xmm1));
+                        Asm.add( new OpMov( Register.xmm0, Register.rax));
+                        Asm.add( new OpNeg( Register.rax ));
+                        Asm.add( new OpPush( Register.rax, StorageClass.PRIMITIVE));
+
+                    
+                    } else 
+                    {
+                        Console.WriteLine("WHATS THE NODE TYPE!");
+                        Environment.Exit(94);
+                    }
+                }    
             ),
             new("relexp :: bitexp"),
 
@@ -199,6 +270,10 @@ public class ProductionsExpr{
                             Asm.add(new OpDivF( Register.xmm0, Register.xmm1));
                             Asm.add(new OpPushF( Register.xmm0, StorageClass.PRIMITIVE ));
                         }
+                        if( n["MULOP"].token.lexeme == "%"){
+                            Utils.error(n["MULOP"].token, "Cannot do modulo on floats");
+                        }
+                        
                     }
                 
                 }
@@ -346,6 +421,19 @@ public class ProductionsExpr{
             new("factor :: BOOLCONST",
                 setNodeTypes: (n) => {
                     n.nodeType = NodeType.Bool;
+                },
+                generateCode: (n) =>{
+                    string s = n["BOOLCONST"].token.lexeme;
+                    if( s == "true"){
+                        Asm.add( new OpMov(1, Register.rax));
+                        Asm.add( new OpPush(Register.rax, StorageClass.PRIMITIVE));
+                    }
+                    else if( s == "false"){
+                        Asm.add( new OpMov(0, Register.rax));
+                        Asm.add( new OpPush(Register.rax, StorageClass.PRIMITIVE));
+                    }
+                    
+                    
                 }
             ),
 

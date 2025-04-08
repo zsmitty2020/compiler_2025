@@ -59,15 +59,19 @@ namespace lab{
             //else return data    
             if( table.ContainsKey(id.lexeme) )
                 return table[id.lexeme];
-            else
+            else{
+                Console.WriteLine($"No such lexeme {id.lexeme}");
                 Environment.Exit(1);
+            }
             return null;
         }
         public static VarInfo lookup(string id){
             if( table.ContainsKey(id) )
                 return table[id];
-            else
+            else{
+                Console.WriteLine($"No such Id {id}");
                 Environment.Exit(1);
+            }
             return null;
         }
 
