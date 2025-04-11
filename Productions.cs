@@ -70,7 +70,27 @@ namespace lab{
                 new("stmts :: stmt SEMI stmts"),
                 new("stmts :: SEMI"),
                 new("stmts :: lambda"),
-                new("stmt :: assign | cond | loop | vardecl | return"),
+                new("stmt :: assign | cond | loop | vardecl | return | break | continue"),
+                new("break :: BREAK",
+                    generateCode: (n) => {
+                        TreeNode loop = n;
+                        while(loop != null && loop.sym != "loop" )
+                            loop = loop.parent;
+                        if( loop == null )
+                            Utils.error(n["BREAK"].token, "break outside of a loop");
+                        Asm.add( new OpJmp( loop.exit ) );
+                    }
+                ),
+                new("continue :: CONTINUE",
+                    generateCode: (n) => {
+                        TreeNode loop = n;
+                        while(loop != null && loop.sym != "loop" )
+                            loop = loop.parent;
+                        if( loop == null )
+                            Utils.error(n["CONTINUE"].token, "break outside of a loop");
+                        Asm.add( new OpJmp( loop.test ) );
+                    }
+                ),
                 new("assign :: expr EQ expr",
                     setNodeTypes: (n) => {
                         var t1 = n.children[0];
@@ -83,10 +103,126 @@ namespace lab{
                         }
                     }
                 ),
-                new("cond :: IF LPAREN expr RPAREN braceblock"),
-                new("cond :: IF LPAREN expr RPAREN braceblock ELSE braceblock"),
-                new("loop :: WHILE LPAREN expr RPAREN braceblock"),
-                new("loop :: REPEAT braceblock UNTIL LPAREN expr RPAREN"),
+                new("cond :: IF LPAREN expr RPAREN braceblock",
+                    setNodeTypes: (n) => {
+                        foreach(var c in n.children){
+                            c.setNodeTypes();
+                        }
+                        n["expr"].setNodeTypes();
+                        var tmp = n["expr"].nodeType;
+                        if(tmp != NodeType.Bool){
+                            Utils.error(n["LPAREN"].token, "EXPR is not a BOOL in COND->IF");
+                        }
+                        n.nodeType = tmp;
+                    },
+                    generateCode: (n) => {
+
+                        var endifLabel = new Label($"end of if starting at line {n["IF"].token.line}");
+                        
+                        //make code for expr; leave result on stack
+                        n["expr"].generateCode();
+
+                        //get result into rax, discard storage class
+                        Asm.add( new OpPop( Register.rax, null) );
+                        Asm.add( new OpJmpIfZero( Register.rax, endifLabel) );
+
+                        n["braceblock"].generateCode();
+                        Asm.add( new OpLabel( endifLabel) );
+                    }
+                ),
+                new("cond :: IF LPAREN expr RPAREN braceblock ELSE braceblock",
+                    setNodeTypes: (n) => {
+                        foreach(var c in n.children){
+                            c.setNodeTypes();
+                        }
+                        n["expr"].setNodeTypes();
+                        var tmp = n["expr"].nodeType;
+                        if(tmp != NodeType.Bool){
+                            Utils.error(n["LPAREN"].token, "EXPR is not a BOOL in COND->IF/ELSE");
+                        }
+                        n.nodeType = tmp;
+                    },
+                    generateCode: (n) => {
+
+                        var elseLabel = new Label($"else at line {n["ELSE"].token.line}");
+                        var endifLabel = new Label($"end of if starting at line {n["IF"].token.line}");
+                        
+                        //make code for expr; leave result on stack
+                        n["expr"].generateCode();
+
+                        //get result into rax, discard storage class
+                        Asm.add(new OpPop(Register.rax, null));
+                        Asm.add( new OpJmpIfZero( Register.rax, elseLabel));
+                        n.children[4].generateCode();
+                        Asm.add( new OpJmp( endifLabel ));
+                        Asm.add( new OpLabel( elseLabel ));
+                        n.children[6].generateCode();
+                        Asm.add( new OpLabel( endifLabel));
+                    }
+                ),
+                new("loop :: WHILE LPAREN expr RPAREN braceblock",
+                    setNodeTypes: (n) => {
+                        foreach(var c in n.children){
+                            c.setNodeTypes();
+                        }
+                        n["expr"].setNodeTypes();
+                        var tmp = n["expr"].nodeType;
+                        if(tmp != NodeType.Bool){
+                            Utils.error(n["LPAREN"].token, "EXPR is not a BOOL in LOOP->WHILE");
+                        }
+                        n.nodeType = tmp;
+                    },
+                    generateCode: (n) => {
+                        int line = n["WHILE"].token.line;
+                        var topLoop = new Label($"top of while loop at line {line}");
+                        var bottomLoop = new Label($"end of while loop at line {line}");
+
+                        n.entry = topLoop; 
+                        n.exit = bottomLoop;
+                        n.test = topLoop;
+
+                        Asm.add( new OpLabel(topLoop));
+                        n["expr"].generateCode();
+                        Asm.add( new OpPop( Register.rax, null));
+                        Asm.add( new OpJmpIfZero( Register.rax, bottomLoop));
+                        n["braceblock"].generateCode();
+                        Asm.add( new OpJmp( topLoop));
+                        Asm.add( new OpLabel( bottomLoop));
+                    }
+
+                ),
+                new("loop :: REPEAT braceblock UNTIL LPAREN expr RPAREN",
+                    setNodeTypes: (n) => {
+                        foreach(var c in n.children){
+                            c.setNodeTypes();
+                        }
+                        n["expr"].setNodeTypes();
+                        var tmp = n["expr"].nodeType;
+                        if(tmp != NodeType.Bool){
+                            Utils.error(n["LPAREN"].token, "EXPR is not a BOOL in LOOP->REPEAT/UNTIL");
+                        }
+                        n.nodeType = tmp;
+                    },
+                    generateCode: (n) => {
+                        var line = new Label($"end of test comparison at line {n["UNTIL"].token.line}");
+                        var bottomLoop = new Label($"end of while loop at line {line}");
+                        var topLoop = new Label($"top of while loop at line {n["REPEAT"].token.line}");
+                        
+                        n.entry = topLoop; 
+                        n.exit = bottomLoop;
+                        n.test = line;
+
+                        Asm.add( new OpLabel(topLoop));
+                        n["braceblock"].generateCode();
+                        Asm.add( new OpLabel(line));
+                        n["expr"].generateCode();
+                        Asm.add( new OpPop( Register.rax, null));
+                        Asm.add( new OpJmpIfZero( Register.rax, topLoop));
+                        
+                        Asm.add( new OpLabel( bottomLoop));
+
+                    }
+                ),
                 new("return :: RETURN expr",
                     generateCode: (n) => {
 

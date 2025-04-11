@@ -1,3 +1,5 @@
+using System.Formats.Asn1;
+
 namespace lab{
 
 public class ProductionsExpr{
@@ -19,6 +21,24 @@ public class ProductionsExpr{
             new("orexp :: orexp OROP andexp",
                 setNodeTypes: (n) => {
                     Utils.typeCheck(n, NodeType.Bool, NodeType.Bool);
+                },
+                generateCode: (n) => {
+
+                    //this is going to leave the result
+                    //on top of the stack
+                    n["orexp"].generateCode();
+
+                    var endexp = new Label($"end of and expr at line {n["OROP"].token.line}");
+                    //look on top of stack and if it is zero,
+                    //skip over relexp
+                    Asm.add( new OpComment( "See if result of first and operand was false"));
+                    Asm.add( new OpMov( Register.rsp, 8, Register.rax) );
+                    Asm.add( new OpJmpIfNotZero(Register.rax, endexp) );
+
+                    Asm.add( new OpAdd( Register.rsp, 16 ));
+                    n["andexp"].generateCode();
+                    Asm.add( new OpLabel( endexp ) );
+                    
                 }
             ),
             new("orexp :: andexp"),
@@ -27,6 +47,23 @@ public class ProductionsExpr{
             new("andexp :: andexp ANDOP relexp",
                 setNodeTypes: (n) => {
                     Utils.typeCheck(n,NodeType.Bool, NodeType.Bool);
+                },
+                generateCode: (n) => {
+
+                    //this is going to leave the result
+                    //on top of the stack
+                    n["andexp"].generateCode();
+
+                    var endexp = new Label($"end of and expr at line {n["ANDOP"].token.line}");
+                    //look on top of stack and if it is zero,
+                    //skip over relexp
+                    Asm.add( new OpComment( "See if result of first and operand was false"));
+                    Asm.add( new OpMov( Register.rsp, 8, Register.rax) );
+                    Asm.add( new OpJmpIfZero(Register.rax, endexp) );
+
+                    Asm.add( new OpAdd( Register.rsp, 16 ));
+                    n["relexp"].generateCode();
+                    Asm.add( new OpLabel( endexp ) );
                 }
             ),
             new("andexp :: relexp"),
@@ -354,6 +391,12 @@ public class ProductionsExpr{
                         Utils.error(notop,$"Type must be a Bool! ({t1})");
                     }
                     n.nodeType = NodeType.Bool;
+                },
+                generateCode: (n) => {
+                    n["unaryexp"].generateCode();
+                    Asm.add(new OpPop(Register.rax, Register.rbx));
+                    Asm.add(new OpTest(Register.rax, Register.rax));
+                    Asm.add(new OpPush(Register.rax, StorageClass.PRIMITIVE));
                 }
             ),
             new("unaryexp :: preincexp"),
@@ -391,7 +434,7 @@ public class ProductionsExpr{
                     n.nodeType = n["expr"].nodeType;
                 },
                 generateCode: (n) => {
-                    throw new Exception("FINISH ME");
+                    n["expr"].generateCode();
                 }
             ),
             new("factor :: ID",

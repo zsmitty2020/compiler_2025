@@ -93,40 +93,78 @@
 	"nodeType" : null,
 		"children" : [
 {
+	"sym" : "loop",
+	"token" : null,
+	"productionNumber" : 40,
+	"nodeType" : "bool",
+		"children" : [
+{
+	"sym" : "REPEAT",
+	"token" : { "sym": "REPEAT" , "line" : 2, "lexeme" : "repeat"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "braceblock",
+	"token" : null,
+	"productionNumber" : 7,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "LBRACE",
+	"token" : { "sym": "LBRACE" , "line" : 2, "lexeme" : "{"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "stmts",
+	"token" : null,
+	"productionNumber" : 24,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "CONTINUE",
+	"token" : { "sym": "CONTINUE" , "line" : 3, "lexeme" : "continue"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "SEMI",
+	"token" : { "sym": "SEMI" , "line" : 3, "lexeme" : ""  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "stmts",
+	"token" : null,
+	"productionNumber" : 24,
+	"nodeType" : null,
+		"children" : [
+{
 	"sym" : "return",
 	"token" : null,
-	"productionNumber" : 37,
+	"productionNumber" : 41,
 	"nodeType" : null,
 		"children" : [
 {
 	"sym" : "RETURN",
-	"token" : { "sym": "RETURN" , "line" : 2, "lexeme" : "return"  },
-	"productionNumber" : -1,
-	"nodeType" : null,
-		"children" : [
-					],
-	"varInfo" : null
-}
-,
-{
-	"sym" : "relexp",
-	"token" : null,
-	"productionNumber" : 48,
-	"nodeType" : "bool",
-		"children" : [
-{
-	"sym" : "NUM",
-	"token" : { "sym": "NUM" , "line" : 2, "lexeme" : "3"  },
-	"productionNumber" : -1,
-	"nodeType" : null,
-		"children" : [
-					],
-	"varInfo" : null
-}
-,
-{
-	"sym" : "RELOP",
-	"token" : { "sym": "RELOP" , "line" : 2, "lexeme" : "!="  },
+	"token" : { "sym": "RETURN" , "line" : 4, "lexeme" : "return"  },
 	"productionNumber" : -1,
 	"nodeType" : null,
 		"children" : [
@@ -136,13 +174,10 @@
 ,
 {
 	"sym" : "NUM",
-	"token" : { "sym": "NUM" , "line" : 2, "lexeme" : "3"  },
+	"token" : { "sym": "NUM" , "line" : 4, "lexeme" : "102"  },
 	"productionNumber" : -1,
 	"nodeType" : null,
 		"children" : [
-					],
-	"varInfo" : null
-}
 					],
 	"varInfo" : null
 }
@@ -152,7 +187,7 @@
 ,
 {
 	"sym" : "SEMI",
-	"token" : { "sym": "SEMI" , "line" : 2, "lexeme" : ""  },
+	"token" : { "sym": "SEMI" , "line" : 4, "lexeme" : ""  },
 	"productionNumber" : -1,
 	"nodeType" : null,
 		"children" : [
@@ -172,10 +207,169 @@
 					],
 	"varInfo" : null
 }
+					],
+	"varInfo" : null
+}
 ,
 {
 	"sym" : "RBRACE",
-	"token" : { "sym": "RBRACE" , "line" : 3, "lexeme" : "}"  },
+	"token" : { "sym": "RBRACE" , "line" : 5, "lexeme" : "}"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "UNTIL",
+	"token" : { "sym": "UNTIL" , "line" : 5, "lexeme" : "until"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "LPAREN",
+	"token" : { "sym": "LPAREN" , "line" : 5, "lexeme" : "("  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "relexp",
+	"token" : null,
+	"productionNumber" : 52,
+	"nodeType" : "bool",
+		"children" : [
+{
+	"sym" : "NUM",
+	"token" : { "sym": "NUM" , "line" : 5, "lexeme" : "3"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "RELOP",
+	"token" : { "sym": "RELOP" , "line" : 5, "lexeme" : ">"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "NUM",
+	"token" : { "sym": "NUM" , "line" : 5, "lexeme" : "4"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "RPAREN",
+	"token" : { "sym": "RPAREN" , "line" : 5, "lexeme" : ")"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "SEMI",
+	"token" : { "sym": "SEMI" , "line" : 5, "lexeme" : ""  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "stmts",
+	"token" : null,
+	"productionNumber" : 24,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "return",
+	"token" : null,
+	"productionNumber" : 41,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "RETURN",
+	"token" : { "sym": "RETURN" , "line" : 6, "lexeme" : "return"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "NUM",
+	"token" : { "sym": "NUM" , "line" : 6, "lexeme" : "100"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "SEMI",
+	"token" : { "sym": "SEMI" , "line" : 6, "lexeme" : ""  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "stmts",
+	"token" : null,
+	"productionNumber" : 26,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "RBRACE",
+	"token" : { "sym": "RBRACE" , "line" : 7, "lexeme" : "}"  },
 	"productionNumber" : -1,
 	"nodeType" : null,
 		"children" : [
@@ -185,7 +379,7 @@
 ,
 {
 	"sym" : "SEMI",
-	"token" : { "sym": "SEMI" , "line" : 3, "lexeme" : ""  },
+	"token" : { "sym": "SEMI" , "line" : 7, "lexeme" : ""  },
 	"productionNumber" : -1,
 	"nodeType" : null,
 		"children" : [
