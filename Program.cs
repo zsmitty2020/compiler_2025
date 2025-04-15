@@ -28,6 +28,8 @@
             var T = new Tokenizer(inp);
             root = Parser.parse(T);
             root.collectClassNames();
+            root.collectFunctionNames();
+            
             root.setNodeTypes();
 
             root.generateCode();

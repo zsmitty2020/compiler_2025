@@ -4,7 +4,7 @@
 EXE = r"C:\Users\Zach Smith\Desktop\Compiler\compiler_2025\bin\Debug\net8.0\test.exe"
 
 
-TIMEOUT=5
+TIMEOUT=3
 
 
 CRASH="crash"
@@ -39,12 +39,12 @@ def present(status):
 
 def main():
     global EXE
-    stopOnFirstFail=True
+    stopOnFirstFail=False
 
     base = os.path.abspath(os.path.dirname(__file__))
 
     verbose=True
-    keepgoing=False
+    keepgoing=True
     skip=0
 
     i=1

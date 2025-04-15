@@ -8,19 +8,25 @@ namespace lab{
         public delegate void WalkCallbackType(TreeNode n);
 
         public WalkCallbackType collectClassNames;
+        public WalkCallbackType collectFunctionNames;
         public WalkCallbackType setNodeTypes;
         public WalkCallbackType generateCode;
+        public WalkCallbackType pushAddressToStack;
 
         //p = "foo :: bar baz bam | boom"
         public PSpec(string p, 
                     WalkCallbackType collectClassNames=null,
+                    WalkCallbackType collectFunctionNames=null,
                     WalkCallbackType setNodeTypes = null,
-                    WalkCallbackType generateCode=null
+                    WalkCallbackType generateCode=null,
+                    WalkCallbackType pushAddressToStack=null
         ){
             this.spec=p;
             this.collectClassNames = collectClassNames ?? defaultCollectClassNames;
+            this.collectFunctionNames = collectFunctionNames ?? defaultCollectFunctionNames;
             this.setNodeTypes = setNodeTypes ?? defaultSetNodeTypes;
             this.generateCode = generateCode ?? defaultGenerateCode;
+            this.pushAddressToStack = pushAddressToStack ?? defaultPushAddressToStack;
 
             // if( collectClassNames != null )
             //     this.collectClassNames = collectClassNames;
@@ -30,6 +36,12 @@ namespace lab{
         void defaultCollectClassNames(TreeNode n){
             foreach(TreeNode c in n.children){
                 c.collectClassNames();
+            }
+        }
+
+        void defaultCollectFunctionNames(TreeNode n){
+            foreach(TreeNode c in n.children){
+                c.collectFunctionNames();
             }
         }
 
@@ -45,6 +57,12 @@ namespace lab{
             foreach(TreeNode c in n.children){
                 c.generateCode();
             }
+        }
+        public static void defaultPushAddressToStack(TreeNode n){
+            if( n.children.Count == 1 )
+                n.children[0].pushAddressToStack();
+            else
+                Utils.error(n.firstToken(), "Expected lvalue");
         }
 
     }

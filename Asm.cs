@@ -43,6 +43,18 @@ namespace lab{
             foreach( var op in ops ){
                 op.output(w);
             }
+
+            w.WriteLine(".section .data");
+            foreach( string name in SymbolTable.table.Keys){
+                vi = SymbolTable.table[name];
+                loc = vi.location as GlobalLocation;
+                if( vi.type as FunctionNodeType != null  )
+                    continue;
+                w.WriteLine( $"{loc.lbl}:   /* {loc.lbl.comment} */" );
+                w.WriteLine( "    .quad 0  /* storage class = primitive */");
+                w.WriteLine( "    .quad 0  /* value */");
+            }
+            
         }
     }
 

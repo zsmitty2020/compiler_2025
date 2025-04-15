@@ -93,14 +93,14 @@
 	"nodeType" : null,
 		"children" : [
 {
-	"sym" : "loop",
+	"sym" : "vardecl",
 	"token" : null,
-	"productionNumber" : 40,
-	"nodeType" : "bool",
+	"productionNumber" : 43,
+	"nodeType" : null,
 		"children" : [
 {
-	"sym" : "REPEAT",
-	"token" : { "sym": "REPEAT" , "line" : 2, "lexeme" : "repeat"  },
+	"sym" : "VAR",
+	"token" : { "sym": "VAR" , "line" : 2, "lexeme" : "var"  },
 	"productionNumber" : -1,
 	"nodeType" : null,
 		"children" : [
@@ -109,14 +109,41 @@
 }
 ,
 {
-	"sym" : "braceblock",
-	"token" : null,
-	"productionNumber" : 7,
+	"sym" : "ID",
+	"token" : { "sym": "ID" , "line" : 2, "lexeme" : "x"  },
+	"productionNumber" : -1,
 	"nodeType" : null,
 		"children" : [
+					],
+	"varInfo" : null
+}
+,
 {
-	"sym" : "LBRACE",
-	"token" : { "sym": "LBRACE" , "line" : 2, "lexeme" : "{"  },
+	"sym" : "COLON",
+	"token" : { "sym": "COLON" , "line" : 2, "lexeme" : ":"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "TYPE",
+	"token" : { "sym": "TYPE" , "line" : 2, "lexeme" : "int"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "SEMI",
+	"token" : { "sym": "SEMI" , "line" : 2, "lexeme" : ""  },
 	"productionNumber" : -1,
 	"nodeType" : null,
 		"children" : [
@@ -131,11 +158,50 @@
 	"nodeType" : null,
 		"children" : [
 {
-	"sym" : "CONTINUE",
-	"token" : { "sym": "CONTINUE" , "line" : 3, "lexeme" : "continue"  },
+	"sym" : "vardecl",
+	"token" : null,
+	"productionNumber" : 43,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "VAR",
+	"token" : { "sym": "VAR" , "line" : 3, "lexeme" : "var"  },
 	"productionNumber" : -1,
 	"nodeType" : null,
 		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "ID",
+	"token" : { "sym": "ID" , "line" : 3, "lexeme" : "y"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "COLON",
+	"token" : { "sym": "COLON" , "line" : 3, "lexeme" : ":"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "TYPE",
+	"token" : { "sym": "TYPE" , "line" : 3, "lexeme" : "int"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
 					],
 	"varInfo" : null
 }
@@ -157,14 +223,14 @@
 	"nodeType" : null,
 		"children" : [
 {
-	"sym" : "return",
+	"sym" : "vardecl",
 	"token" : null,
-	"productionNumber" : 41,
+	"productionNumber" : 43,
 	"nodeType" : null,
 		"children" : [
 {
-	"sym" : "RETURN",
-	"token" : { "sym": "RETURN" , "line" : 4, "lexeme" : "return"  },
+	"sym" : "VAR",
+	"token" : { "sym": "VAR" , "line" : 4, "lexeme" : "var"  },
 	"productionNumber" : -1,
 	"nodeType" : null,
 		"children" : [
@@ -173,8 +239,28 @@
 }
 ,
 {
-	"sym" : "NUM",
-	"token" : { "sym": "NUM" , "line" : 4, "lexeme" : "102"  },
+	"sym" : "ID",
+	"token" : { "sym": "ID" , "line" : 4, "lexeme" : "z"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "COLON",
+	"token" : { "sym": "COLON" , "line" : 4, "lexeme" : ":"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "TYPE",
+	"token" : { "sym": "TYPE" , "line" : 4, "lexeme" : "int"  },
 	"productionNumber" : -1,
 	"nodeType" : null,
 		"children" : [
@@ -198,61 +284,18 @@
 {
 	"sym" : "stmts",
 	"token" : null,
-	"productionNumber" : 26,
+	"productionNumber" : 24,
 	"nodeType" : null,
 		"children" : [
-					],
-	"varInfo" : null
-}
-					],
-	"varInfo" : null
-}
-					],
-	"varInfo" : null
-}
-,
 {
-	"sym" : "RBRACE",
-	"token" : { "sym": "RBRACE" , "line" : 5, "lexeme" : "}"  },
-	"productionNumber" : -1,
-	"nodeType" : null,
-		"children" : [
-					],
-	"varInfo" : null
-}
-					],
-	"varInfo" : null
-}
-,
-{
-	"sym" : "UNTIL",
-	"token" : { "sym": "UNTIL" , "line" : 5, "lexeme" : "until"  },
-	"productionNumber" : -1,
-	"nodeType" : null,
-		"children" : [
-					],
-	"varInfo" : null
-}
-,
-{
-	"sym" : "LPAREN",
-	"token" : { "sym": "LPAREN" , "line" : 5, "lexeme" : "("  },
-	"productionNumber" : -1,
-	"nodeType" : null,
-		"children" : [
-					],
-	"varInfo" : null
-}
-,
-{
-	"sym" : "relexp",
+	"sym" : "vardecl",
 	"token" : null,
-	"productionNumber" : 52,
-	"nodeType" : "bool",
+	"productionNumber" : 43,
+	"nodeType" : null,
 		"children" : [
 {
-	"sym" : "NUM",
-	"token" : { "sym": "NUM" , "line" : 5, "lexeme" : "3"  },
+	"sym" : "VAR",
+	"token" : { "sym": "VAR" , "line" : 5, "lexeme" : "var"  },
 	"productionNumber" : -1,
 	"nodeType" : null,
 		"children" : [
@@ -261,8 +304,8 @@
 }
 ,
 {
-	"sym" : "RELOP",
-	"token" : { "sym": "RELOP" , "line" : 5, "lexeme" : ">"  },
+	"sym" : "ID",
+	"token" : { "sym": "ID" , "line" : 5, "lexeme" : "flag"  },
 	"productionNumber" : -1,
 	"nodeType" : null,
 		"children" : [
@@ -271,21 +314,18 @@
 }
 ,
 {
-	"sym" : "NUM",
-	"token" : { "sym": "NUM" , "line" : 5, "lexeme" : "4"  },
+	"sym" : "COLON",
+	"token" : { "sym": "COLON" , "line" : 5, "lexeme" : ":"  },
 	"productionNumber" : -1,
 	"nodeType" : null,
 		"children" : [
 					],
 	"varInfo" : null
 }
-					],
-	"varInfo" : null
-}
 ,
 {
-	"sym" : "RPAREN",
-	"token" : { "sym": "RPAREN" , "line" : 5, "lexeme" : ")"  },
+	"sym" : "TYPE",
+	"token" : { "sym": "TYPE" , "line" : 5, "lexeme" : "bool"  },
 	"productionNumber" : -1,
 	"nodeType" : null,
 		"children" : [
@@ -313,14 +353,24 @@
 	"nodeType" : null,
 		"children" : [
 {
-	"sym" : "return",
+	"sym" : "assign",
 	"token" : null,
-	"productionNumber" : 41,
+	"productionNumber" : 36,
 	"nodeType" : null,
 		"children" : [
 {
-	"sym" : "RETURN",
-	"token" : { "sym": "RETURN" , "line" : 6, "lexeme" : "return"  },
+	"sym" : "ID",
+	"token" : { "sym": "ID" , "line" : 6, "lexeme" : "x"  },
+	"productionNumber" : -1,
+	"nodeType" : "int",
+		"children" : [
+					],
+	"varInfo" : 
+{"type": "int", "nesting": 1, "location": {"storageClass": "local", "index": 0}}}
+,
+{
+	"sym" : "EQ",
+	"token" : { "sym": "EQ" , "line" : 6, "lexeme" : "="  },
 	"productionNumber" : -1,
 	"nodeType" : null,
 		"children" : [
@@ -330,7 +380,7 @@
 ,
 {
 	"sym" : "NUM",
-	"token" : { "sym": "NUM" , "line" : 6, "lexeme" : "100"  },
+	"token" : { "sym": "NUM" , "line" : 6, "lexeme" : "0"  },
 	"productionNumber" : -1,
 	"nodeType" : null,
 		"children" : [
@@ -354,6 +404,718 @@
 {
 	"sym" : "stmts",
 	"token" : null,
+	"productionNumber" : 24,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "assign",
+	"token" : null,
+	"productionNumber" : 36,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "ID",
+	"token" : { "sym": "ID" , "line" : 7, "lexeme" : "y"  },
+	"productionNumber" : -1,
+	"nodeType" : "int",
+		"children" : [
+					],
+	"varInfo" : 
+{"type": "int", "nesting": 1, "location": {"storageClass": "local", "index": 1}}}
+,
+{
+	"sym" : "EQ",
+	"token" : { "sym": "EQ" , "line" : 7, "lexeme" : "="  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "NUM",
+	"token" : { "sym": "NUM" , "line" : 7, "lexeme" : "0"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "SEMI",
+	"token" : { "sym": "SEMI" , "line" : 7, "lexeme" : ""  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "stmts",
+	"token" : null,
+	"productionNumber" : 24,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "assign",
+	"token" : null,
+	"productionNumber" : 36,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "ID",
+	"token" : { "sym": "ID" , "line" : 8, "lexeme" : "z"  },
+	"productionNumber" : -1,
+	"nodeType" : "int",
+		"children" : [
+					],
+	"varInfo" : 
+{"type": "int", "nesting": 1, "location": {"storageClass": "local", "index": 2}}}
+,
+{
+	"sym" : "EQ",
+	"token" : { "sym": "EQ" , "line" : 8, "lexeme" : "="  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "NUM",
+	"token" : { "sym": "NUM" , "line" : 8, "lexeme" : "0"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "SEMI",
+	"token" : { "sym": "SEMI" , "line" : 8, "lexeme" : ""  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "stmts",
+	"token" : null,
+	"productionNumber" : 24,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "assign",
+	"token" : null,
+	"productionNumber" : 36,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "ID",
+	"token" : { "sym": "ID" , "line" : 9, "lexeme" : "flag"  },
+	"productionNumber" : -1,
+	"nodeType" : "bool",
+		"children" : [
+					],
+	"varInfo" : 
+{"type": "bool", "nesting": 1, "location": {"storageClass": "local", "index": 3}}}
+,
+{
+	"sym" : "EQ",
+	"token" : { "sym": "EQ" , "line" : 9, "lexeme" : "="  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "BOOLCONST",
+	"token" : { "sym": "BOOLCONST" , "line" : 9, "lexeme" : "true"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "SEMI",
+	"token" : { "sym": "SEMI" , "line" : 9, "lexeme" : ""  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "stmts",
+	"token" : null,
+	"productionNumber" : 24,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "loop",
+	"token" : null,
+	"productionNumber" : 39,
+	"nodeType" : "bool",
+		"children" : [
+{
+	"sym" : "WHILE",
+	"token" : { "sym": "WHILE" , "line" : 10, "lexeme" : "while"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "LPAREN",
+	"token" : { "sym": "LPAREN" , "line" : 10, "lexeme" : "("  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "ID",
+	"token" : { "sym": "ID" , "line" : 10, "lexeme" : "flag"  },
+	"productionNumber" : -1,
+	"nodeType" : "bool",
+		"children" : [
+					],
+	"varInfo" : 
+{"type": "bool", "nesting": 1, "location": {"storageClass": "local", "index": 3}}}
+,
+{
+	"sym" : "RPAREN",
+	"token" : { "sym": "RPAREN" , "line" : 10, "lexeme" : ")"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "braceblock",
+	"token" : null,
+	"productionNumber" : 7,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "LBRACE",
+	"token" : { "sym": "LBRACE" , "line" : 10, "lexeme" : "{"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "stmts",
+	"token" : null,
+	"productionNumber" : 24,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "vardecl",
+	"token" : null,
+	"productionNumber" : 43,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "VAR",
+	"token" : { "sym": "VAR" , "line" : 11, "lexeme" : "var"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "ID",
+	"token" : { "sym": "ID" , "line" : 11, "lexeme" : "tmp"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "COLON",
+	"token" : { "sym": "COLON" , "line" : 11, "lexeme" : ":"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "TYPE",
+	"token" : { "sym": "TYPE" , "line" : 11, "lexeme" : "int"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "SEMI",
+	"token" : { "sym": "SEMI" , "line" : 11, "lexeme" : ""  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "stmts",
+	"token" : null,
+	"productionNumber" : 24,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "assign",
+	"token" : null,
+	"productionNumber" : 36,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "ID",
+	"token" : { "sym": "ID" , "line" : 12, "lexeme" : "tmp"  },
+	"productionNumber" : -1,
+	"nodeType" : "int",
+		"children" : [
+					],
+	"varInfo" : 
+{"type": "int", "nesting": 2, "location": {"storageClass": "local", "index": 4}}}
+,
+{
+	"sym" : "EQ",
+	"token" : { "sym": "EQ" , "line" : 12, "lexeme" : "="  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "sumexp",
+	"token" : null,
+	"productionNumber" : 58,
+	"nodeType" : "int",
+		"children" : [
+{
+	"sym" : "ID",
+	"token" : { "sym": "ID" , "line" : 12, "lexeme" : "y"  },
+	"productionNumber" : -1,
+	"nodeType" : "int",
+		"children" : [
+					],
+	"varInfo" : 
+{"type": "int", "nesting": 1, "location": {"storageClass": "local", "index": 1}}}
+,
+{
+	"sym" : "ADDOP",
+	"token" : { "sym": "ADDOP" , "line" : 12, "lexeme" : "+"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "ID",
+	"token" : { "sym": "ID" , "line" : 12, "lexeme" : "x"  },
+	"productionNumber" : -1,
+	"nodeType" : "int",
+		"children" : [
+					],
+	"varInfo" : 
+{"type": "int", "nesting": 1, "location": {"storageClass": "local", "index": 0}}}
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "SEMI",
+	"token" : { "sym": "SEMI" , "line" : 12, "lexeme" : ""  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "stmts",
+	"token" : null,
+	"productionNumber" : 24,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "assign",
+	"token" : null,
+	"productionNumber" : 36,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "ID",
+	"token" : { "sym": "ID" , "line" : 13, "lexeme" : "y"  },
+	"productionNumber" : -1,
+	"nodeType" : "int",
+		"children" : [
+					],
+	"varInfo" : 
+{"type": "int", "nesting": 1, "location": {"storageClass": "local", "index": 1}}}
+,
+{
+	"sym" : "EQ",
+	"token" : { "sym": "EQ" , "line" : 13, "lexeme" : "="  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "ID",
+	"token" : { "sym": "ID" , "line" : 13, "lexeme" : "tmp"  },
+	"productionNumber" : -1,
+	"nodeType" : "int",
+		"children" : [
+					],
+	"varInfo" : 
+{"type": "int", "nesting": 2, "location": {"storageClass": "local", "index": 4}}}
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "SEMI",
+	"token" : { "sym": "SEMI" , "line" : 13, "lexeme" : ""  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "stmts",
+	"token" : null,
+	"productionNumber" : 24,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "assign",
+	"token" : null,
+	"productionNumber" : 36,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "ID",
+	"token" : { "sym": "ID" , "line" : 14, "lexeme" : "x"  },
+	"productionNumber" : -1,
+	"nodeType" : "int",
+		"children" : [
+					],
+	"varInfo" : 
+{"type": "int", "nesting": 1, "location": {"storageClass": "local", "index": 0}}}
+,
+{
+	"sym" : "EQ",
+	"token" : { "sym": "EQ" , "line" : 14, "lexeme" : "="  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "sumexp",
+	"token" : null,
+	"productionNumber" : 58,
+	"nodeType" : "int",
+		"children" : [
+{
+	"sym" : "ID",
+	"token" : { "sym": "ID" , "line" : 14, "lexeme" : "x"  },
+	"productionNumber" : -1,
+	"nodeType" : "int",
+		"children" : [
+					],
+	"varInfo" : 
+{"type": "int", "nesting": 1, "location": {"storageClass": "local", "index": 0}}}
+,
+{
+	"sym" : "ADDOP",
+	"token" : { "sym": "ADDOP" , "line" : 14, "lexeme" : "+"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "NUM",
+	"token" : { "sym": "NUM" , "line" : 14, "lexeme" : "1"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "SEMI",
+	"token" : { "sym": "SEMI" , "line" : 14, "lexeme" : ""  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "stmts",
+	"token" : null,
+	"productionNumber" : 24,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "cond",
+	"token" : null,
+	"productionNumber" : 37,
+	"nodeType" : "bool",
+		"children" : [
+{
+	"sym" : "IF",
+	"token" : { "sym": "IF" , "line" : 15, "lexeme" : "if"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "LPAREN",
+	"token" : { "sym": "LPAREN" , "line" : 15, "lexeme" : "("  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "relexp",
+	"token" : null,
+	"productionNumber" : 52,
+	"nodeType" : "bool",
+		"children" : [
+{
+	"sym" : "ID",
+	"token" : { "sym": "ID" , "line" : 15, "lexeme" : "x"  },
+	"productionNumber" : -1,
+	"nodeType" : "int",
+		"children" : [
+					],
+	"varInfo" : 
+{"type": "int", "nesting": 1, "location": {"storageClass": "local", "index": 0}}}
+,
+{
+	"sym" : "RELOP",
+	"token" : { "sym": "RELOP" , "line" : 15, "lexeme" : ">="  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "NUM",
+	"token" : { "sym": "NUM" , "line" : 15, "lexeme" : "10"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "RPAREN",
+	"token" : { "sym": "RPAREN" , "line" : 15, "lexeme" : ")"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "braceblock",
+	"token" : null,
+	"productionNumber" : 7,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "LBRACE",
+	"token" : { "sym": "LBRACE" , "line" : 15, "lexeme" : "{"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "stmts",
+	"token" : null,
+	"productionNumber" : 24,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "assign",
+	"token" : null,
+	"productionNumber" : 36,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "ID",
+	"token" : { "sym": "ID" , "line" : 16, "lexeme" : "flag"  },
+	"productionNumber" : -1,
+	"nodeType" : "bool",
+		"children" : [
+					],
+	"varInfo" : 
+{"type": "bool", "nesting": 1, "location": {"storageClass": "local", "index": 3}}}
+,
+{
+	"sym" : "EQ",
+	"token" : { "sym": "EQ" , "line" : 16, "lexeme" : "="  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "BOOLCONST",
+	"token" : { "sym": "BOOLCONST" , "line" : 16, "lexeme" : "false"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "SEMI",
+	"token" : { "sym": "SEMI" , "line" : 16, "lexeme" : ""  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "stmts",
+	"token" : null,
+	"productionNumber" : 26,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "RBRACE",
+	"token" : { "sym": "RBRACE" , "line" : 17, "lexeme" : "}"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "SEMI",
+	"token" : { "sym": "SEMI" , "line" : 17, "lexeme" : ""  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "stmts",
+	"token" : null,
 	"productionNumber" : 26,
 	"nodeType" : null,
 		"children" : [
@@ -366,10 +1128,130 @@
 					],
 	"varInfo" : null
 }
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
 ,
 {
 	"sym" : "RBRACE",
-	"token" : { "sym": "RBRACE" , "line" : 7, "lexeme" : "}"  },
+	"token" : { "sym": "RBRACE" , "line" : 18, "lexeme" : "}"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "SEMI",
+	"token" : { "sym": "SEMI" , "line" : 18, "lexeme" : ""  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "stmts",
+	"token" : null,
+	"productionNumber" : 24,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "return",
+	"token" : null,
+	"productionNumber" : 41,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "RETURN",
+	"token" : { "sym": "RETURN" , "line" : 19, "lexeme" : "return"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "ID",
+	"token" : { "sym": "ID" , "line" : 19, "lexeme" : "y"  },
+	"productionNumber" : -1,
+	"nodeType" : "int",
+		"children" : [
+					],
+	"varInfo" : 
+{"type": "int", "nesting": 1, "location": {"storageClass": "local", "index": 1}}}
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "SEMI",
+	"token" : { "sym": "SEMI" , "line" : 19, "lexeme" : ""  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "stmts",
+	"token" : null,
+	"productionNumber" : 26,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "RBRACE",
+	"token" : { "sym": "RBRACE" , "line" : 20, "lexeme" : "}"  },
 	"productionNumber" : -1,
 	"nodeType" : null,
 		"children" : [
@@ -379,7 +1261,7 @@
 ,
 {
 	"sym" : "SEMI",
-	"token" : { "sym": "SEMI" , "line" : 7, "lexeme" : ""  },
+	"token" : { "sym": "SEMI" , "line" : 20, "lexeme" : ""  },
 	"productionNumber" : -1,
 	"nodeType" : null,
 		"children" : [

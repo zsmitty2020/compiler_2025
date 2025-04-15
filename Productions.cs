@@ -9,26 +9,33 @@ namespace lab{
                 new("S :: decls"),
                 new("decls :: funcdecl decls | classdecl decls | vardecl decls | SEMI decls | lambda"),
                 new("funcdecl :: FUNC ID LPAREN optionalPdecls RPAREN optionalReturn LBRACE stmts RBRACE SEMI",
-                    collectClassNames: (n) => {
-                            if(n.parent.sym == "memberfuncdecl"){}
-                            else{
-                                Console.WriteLine("FUNC:"+n.children[1].token.lexeme);
-                            }
-                        },
+                    collectFunctionNames: (n) => {
+                        string funcName = n.children[1].token.lexeme;
+                        Console.WriteLine($"FUNC: {funcName}");
+                        SymbolTable.declareGlobal( n["ID"].token, new FunctionNodeType() );
+                    },   
                     setNodeTypes: (n) => {
-                        SymbolTable.declareGlobal(n["ID"].token, new FunctionNodeType() );
+                        //SymbolTable.declareGlobal(n["ID"].token, new FunctionNodeType() );
                         SymbolTable.enterFunctionScope();
                         foreach( TreeNode c in n.children){
                             c.setNodeTypes();
                         }
+                        n.numLocals = SymbolTable.numLocals;
                         SymbolTable.leaveFunctionScope();
                     },
                     generateCode: (n) => {
-                        VarInfo vi = SymbolTable.lookup( n["ID"].token );
-                        var loc = (vi.location as GlobalLocation);
-                        Asm.add( new OpLabel( loc.lbl ) );
+                        VarInfo vi = SymbolTable.lookup(n["ID"].token); //lookup the function that we're in
+                        var loc = vi.location as GlobalLocation;
+                        Asm.add( new OpLabel(loc.lbl));
+                        Asm.add( new OpPush( Register.rbp, StorageClass.NO_STORAGE_CLASS));
+                        Asm.add( new OpMov( src: Register.rsp, dest: Register.rbp));
+                        Console.WriteLine(n.numLocals);
+                        if( n.numLocals > 0 ){
+                            Asm.add( new OpComment( $"num loc * 16 = {n.numLocals*16}"));
+                            Asm.add( new OpSub( Register.rsp, n.numLocals*16 ));
+                        }
                         n["stmts"].generateCode();
-                        Asm.add(new OpRet());
+                        Utils.epilogue(n.lastToken());
                     }
                 ),
                 new("braceblock :: LBRACE stmts RBRACE",
@@ -101,6 +108,23 @@ namespace lab{
                         if(t1.nodeType != t2.nodeType){
                             Utils.error(eq, $"Node type mismatch! ({n.children[0].nodeType} and {n.children[2].nodeType})");
                         }
+                    },
+                    generateCode: (n) => {
+                        n.children[0].pushAddressToStack();
+                        n.children[2].generateCode();
+                        //get the value (rhs) to rax
+                        //storage class to rbx
+                        Asm.add(new OpPop(Register.rax, Register.rbx));
+                        //address of variable is in rcx;
+                        //discard storage class (storage class of an
+                        //address is 0)
+                        Asm.add( new OpPop( Register.rcx, null));
+
+                        //Write data + storage to memory
+                        //Storage class first, then data
+                        Asm.add( new OpMov( src: Register.rbx, Register.rcx, 0));
+                        Asm.add( new OpMov( src: Register.rax, Register.rcx, 8));
+
                     }
                 ),
                 new("cond :: IF LPAREN expr RPAREN braceblock",
@@ -232,12 +256,12 @@ namespace lab{
 
                         //ABI says return values come back in rax
                         Asm.add( new OpPop(Register.rax,null));
-                        Asm.add( new OpRet());
+                        Utils.epilogue(n["RETURN"].token);
                     }
                 ),
                 new("return :: RETURN",
                     generateCode: (n) => {
-                        Asm.add( new OpRet() );
+                        Utils.epilogue(n["RETURN"].token);
                     }
                 ),
 

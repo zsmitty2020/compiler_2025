@@ -443,6 +443,12 @@ public class ProductionsExpr{
                     VarInfo vi =  SymbolTable.lookup(tok);
                     n["ID"].varInfo = vi;
                     n["ID"].nodeType = n.nodeType = vi.type;
+                },
+                generateCode: (n) => {
+                    n["ID"].varInfo.location.pushValueToStack(Register.rax, Register.rbx);
+                },
+                pushAddressToStack: (n) => {
+                    n["ID"].varInfo.location.pushAddressToStack(Register.rax);
                 }
             ),
             new("factor :: FNUM",

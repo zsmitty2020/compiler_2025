@@ -12,6 +12,10 @@ namespace lab{
         [JsonIgnore]
         public TreeNode parent = null;
 
+        //only meaningful for fundecl nodes: Number of locals
+        //declared in that function
+        public int numLocals = -1;
+
         //only meaningful for tree nodes that are ID's and
         //which are variables
         public VarInfo varInfo = null;
@@ -53,11 +57,22 @@ namespace lab{
             this.production?.pspec.collectClassNames(this);
         }
 
+        public void collectFunctionNames(){
+            this.production?.pspec.collectFunctionNames(this);
+        }
+
         public void setNodeTypes(){
             this.production?.pspec.setNodeTypes(this);
         }
         public void generateCode(){
             this.production?.pspec.generateCode(this);
+        }
+
+        public void pushAddressToStack(){
+            if( this.production != null )
+                this.production.pspec.pushAddressToStack(this);
+            else
+                Utils.error(this.firstToken(),"Cannot get address");
         }
         
 
@@ -181,6 +196,27 @@ namespace lab{
                 }
             }
             throw new Exception();
+        }
+
+        public Token firstToken(){
+            if( this.token != null)
+                return this.token;
+            foreach(var c in this.children){
+                Token t = c.firstToken();
+                if(t!=null)
+                    return t;
+            }
+            return null;
+        }
+        public Token lastToken(){
+            if( this.token != null)
+                return this.token;
+            for(int i=this.children.Count-1;i>=0;i--){
+                Token t = this.children[i].lastToken();
+                if(t!=null)
+                    return t;
+            }
+            return null;
         }
 
     } //end TreeNode
