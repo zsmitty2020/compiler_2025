@@ -6,7 +6,7 @@ namespace lab{
         public static List< Tuple<string, int> > badList = new();
         public static string reduceConflict = null;
         public static int reduceConflictState = -1;
-        public static void create(){
+        public static void create(TextWriter wr){
             //create a file called ParseTable.cs which has the parse table
             using( var w = new StreamWriter("ParseTable.cs") ){
                 w.WriteLine("namespace lab{");
@@ -15,6 +15,7 @@ namespace lab{
                 w.WriteLine("    public static List<Dictionary<string,ParseAction> > table = new() {");
 
                 for(int i=0;i<DFA.allStates.Count;++i){
+                    wr.WriteLine("Row "+i+":");
                     w.WriteLine("        // DFA STATE "+i); //index in allStates == state's "unique" number
                     w.WriteLine("        new Dictionary<string,ParseAction>(){");
                     //shift rules
@@ -25,6 +26,8 @@ namespace lab{
                         w.Write($"\"{sym}\" , ");
                         w.Write($"new ParseAction(PAction.SHIFT, {q.transitions[sym].unique}, null, -1)");
                         w.WriteLine("},");
+
+                        wr.WriteLine($"    {sym} S {q.transitions[sym].unique}");
                     }
                     
                     //Shift-Reduce Conflict checking
@@ -61,6 +64,8 @@ namespace lab{
                                 w.Write($"new ParseAction(PAction.REDUCE, {I.production.rhs.Length}, \"{I.production.lhs}\", {I.production.unique})");
                                 w.WriteLine("},");
                                 reducedList.Add( lookahead );
+
+                                wr.WriteLine($"    {lookahead} R {I.production.rhs.Length} {I.production.lhs}");
                             }
                         }
                     }

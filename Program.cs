@@ -18,7 +18,7 @@
                 //Grammar.dump();
                 DFA.makeDFA(); //time consuming
                 //DFA.dump();
-                TableWriter.create();
+                TableWriter.create(Console.Out);
                 ParseTable.dump();
                 return;
             }
@@ -27,6 +27,8 @@
             var tokens = new List<Token>();
             var T = new Tokenizer(inp);
             root = Parser.parse(T);
+
+            SymbolTable.populateBuiltins();
             root.collectClassNames();
             root.collectFunctionNames();
             

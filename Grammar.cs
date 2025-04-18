@@ -48,6 +48,7 @@ namespace lab{
                     throw new Exception("No :: in production spec");
                 string lhs = pspec.spec.Substring(0,idx).Trim();
                 Grammar.allNonterminals.Add(lhs);
+                
                 string rhss = pspec.spec.Substring(idx+2).Trim();
                 string[] rhsl = rhss.Trim().Split("|",StringSplitOptions.RemoveEmptyEntries );
                 foreach( string tmp in rhsl){

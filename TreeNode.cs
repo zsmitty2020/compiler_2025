@@ -161,22 +161,19 @@ namespace lab{
         }
 
         public override string ToString(){
-            string tmp=this.sym;
-        
+            string s = $"{this.sym}";
+
             if( this.token != null )
-                tmp += $" ({this.token.lexeme})";
+                s += $" ({this.token.lexeme})";
 
             if( this.nodeType != null )
-                tmp += " "+this.nodeType.ToString();
-
+                s += $" {this.nodeType}";
             if( this.varInfo != null )
-                tmp += " "+this.varInfo;
-
-            return tmp;
+                s += $" varInfo[{this.varInfo}]";
+            return s;
         }
 
         public void removeUnitProductions(){
-
             for(int i=0;i<this.children.Count;++i)
                 this.children[i].removeUnitProductions();
 

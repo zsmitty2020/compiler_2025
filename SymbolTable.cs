@@ -4,16 +4,19 @@ namespace lab{
     
     public static class SymbolTable{
 
+        static int numParameters=0;
         public static int numLocals=0;
         public static int nestingLevel=0;
         public static Stack< List<VarInfo> > shadowed = new();
-
+        static Stack< HashSet<String> > locals = new();
         public static Dictionary<string, VarInfo> table = new();
 
         public static void enterFunctionScope(){ 
+            numParameters = 0;
             numLocals=0;
             nestingLevel++;
             shadowed.Push(new());
+            locals.Push( new() );
         }
         public static void leaveFunctionScope(){
             nestingLevel--;
@@ -25,12 +28,22 @@ namespace lab{
         public static void enterLocalScope(){
             nestingLevel++;    
             shadowed.Push(new());
+            locals.Push( new() );
         }
+        public static void leaveLocalScope(){
+            foreach( string name in locals.Peek() )
+                table.Remove(name);
+            locals.Pop();
+            foreach( var vi in shadowed.Pop() )
+                table[vi.token.lexeme] = vi;
+        }
+        /*
         public static void leaveLocalScope(){
             nestingLevel--;
             removeVariablesFromTableWithNestingLevelGreaterThanThreshold(nestingLevel);
             restoreShadowedVariables();
         }
+        */
         static void removeVariablesFromTableWithNestingLevelGreaterThanThreshold(int v){
             //delete anything from table where 
             //table thing's nestinglevel > v
@@ -75,14 +88,16 @@ namespace lab{
             return null;
         }
 
-        public static void declareGlobal(Token token, NodeType type){
+        public static void declareGlobal(Token token, NodeType type, Label lbl=null){
+            if( lbl == null )
+                lbl = new Label(token.lexeme);
             string varname = token.lexeme;
             if( table.ContainsKey(varname)){
                 Utils.error(token, "Redeclaration of variable");
             }
             table[varname] = new VarInfo(token,
                 nestingLevel, //always zero
-                type, new GlobalLocation( new Label(token.lexeme) ));
+                type, new GlobalLocation( lbl ));
         }
         public static void declareLocal(Token token, NodeType type){
             string varname = token.lexeme;
@@ -108,7 +123,7 @@ namespace lab{
             string varname = token.lexeme;
             if( table.ContainsKey(varname)){
                 VarInfo vi = table[varname];
-                if( vi.nestingLevel == nestingLevel ){
+                if( vi.nestingLevel == locals.Count ){
                     Utils.error(token, "Redeclaration of variable");
                 } else if( vi.nestingLevel > nestingLevel ){
                     throw new Exception("ICE");
@@ -122,7 +137,8 @@ namespace lab{
                     type, 
                     new ParameterLocation(numLocals, token.lexeme)
             );
-            //numLocals++;
+            locals.Peek().Add(varname);
+            numParameters++;
         }
 
         public static bool currentlyInGlobalScope(){
@@ -131,6 +147,41 @@ namespace lab{
             else
                 return false;
         }
-    }
 
+        public static void populateBuiltins(){
+            SymbolTable.declareGlobal(
+                new Token("ID", "putc", -1),
+                new FunctionNodeType(NodeType.Int,
+                    new List<NodeType>(){NodeType.Int}
+                ),
+                new Label("putc", "builtin function putc")
+            );
+
+            SymbolTable.declareGlobal(
+                new Token("ID", "getc", -1),
+                new FunctionNodeType(NodeType.Int,
+                    new List<NodeType>(){}
+                ),
+                new Label("getc", "builtin function getc")
+            );
+
+            SymbolTable.declareGlobal(
+                new Token("ID", "putv", -1),
+                new FunctionNodeType(NodeType.Bool,
+                    new List<NodeType>(){NodeType.Int, NodeType.Int}
+                ),
+                new Label("putv", "builtin function putv")
+            );
+
+            SymbolTable.declareGlobal(
+                new Token("ID", "newline", -1),
+                new FunctionNodeType(NodeType.Bool,
+                    new List<NodeType>(){}
+                ),
+                new Label("newline", "builtin function newline")
+            );
+
+        }
+
+    }
 }
