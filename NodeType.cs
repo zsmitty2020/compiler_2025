@@ -77,10 +77,14 @@ public class VoidNodeType : NodeType {
 public class FunctionNodeType: NodeType {
     public NodeType returnType;
     public List<NodeType> paramTypes;
-    public FunctionNodeType(NodeType returnType, 
-        List<NodeType> paramTypes): base("func") {
+    public bool builtin;
+    public FunctionNodeType(
+        NodeType returnType, 
+        List<NodeType> paramTypes,
+        bool builtin): base("func") {
             this.returnType = returnType;
             this.paramTypes = paramTypes;
+            this.builtin=builtin;
     }
 
     public override bool Equals(Object o){

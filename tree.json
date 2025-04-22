@@ -14,7 +14,7 @@
 	"sym" : "funcdecl",
 	"token" : null,
 	"productionNumber" : 6,
-	"nodeType" : null,
+	"nodeType" : "func",
 		"children" : [
 {
 	"sym" : "FUNC",
@@ -70,7 +70,7 @@
 	"sym" : "optionalReturn",
 	"token" : null,
 	"productionNumber" : 9,
-	"nodeType" : null,
+	"nodeType" : "int",
 		"children" : [
 {
 	"sym" : "COLON",
@@ -115,17 +115,17 @@
 	"sym" : "amfexp",
 	"token" : null,
 	"productionNumber" : 75,
-	"nodeType" : "bool",
+	"nodeType" : "void",
 		"children" : [
 {
 	"sym" : "ID",
-	"token" : { "sym": "ID" , "line" : 2, "lexeme" : "putv"  },
+	"token" : { "sym": "ID" , "line" : 2, "lexeme" : "foo"  },
 	"productionNumber" : -1,
 	"nodeType" : "func",
 		"children" : [
 					],
 	"varInfo" : 
-{"type": "func", "nesting": 0, "location": {"storageClass": "global putv"}}}
+{"type": "func", "nesting": 0, "location": {"storageClass": "global lbl1"}}}
 ,
 {
 	"sym" : "LPAREN",
@@ -138,40 +138,11 @@
 }
 ,
 {
-	"sym" : "calllist2",
-	"token" : null,
-	"productionNumber" : 86,
-	"nodeType" : null,
-		"children" : [
-{
 	"sym" : "NUM",
-	"token" : { "sym": "NUM" , "line" : 2, "lexeme" : "123456789"  },
+	"token" : { "sym": "NUM" , "line" : 2, "lexeme" : "1"  },
 	"productionNumber" : -1,
 	"nodeType" : null,
 		"children" : [
-					],
-	"varInfo" : null
-}
-,
-{
-	"sym" : "COMMA",
-	"token" : { "sym": "COMMA" , "line" : 2, "lexeme" : ","  },
-	"productionNumber" : -1,
-	"nodeType" : null,
-		"children" : [
-					],
-	"varInfo" : null
-}
-,
-{
-	"sym" : "NUM",
-	"token" : { "sym": "NUM" , "line" : 2, "lexeme" : "2"  },
-	"productionNumber" : -1,
-	"nodeType" : null,
-		"children" : [
-					],
-	"varInfo" : null
-}
 					],
 	"varInfo" : null
 }
@@ -223,7 +194,7 @@
 ,
 {
 	"sym" : "NUM",
-	"token" : { "sym": "NUM" , "line" : 3, "lexeme" : "126"  },
+	"token" : { "sym": "NUM" , "line" : 3, "lexeme" : "123"  },
 	"productionNumber" : -1,
 	"nodeType" : null,
 		"children" : [
@@ -286,9 +257,253 @@
 {
 	"sym" : "decls",
 	"token" : null,
+	"productionNumber" : 1,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "funcdecl",
+	"token" : null,
+	"productionNumber" : 6,
+	"nodeType" : "func",
+		"children" : [
+{
+	"sym" : "FUNC",
+	"token" : { "sym": "FUNC" , "line" : 6, "lexeme" : "func"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "ID",
+	"token" : { "sym": "ID" , "line" : 6, "lexeme" : "foo"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "LPAREN",
+	"token" : { "sym": "LPAREN" , "line" : 6, "lexeme" : "("  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "pdecl",
+	"token" : null,
+	"productionNumber" : 16,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "ID",
+	"token" : { "sym": "ID" , "line" : 6, "lexeme" : "x"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "COLON",
+	"token" : { "sym": "COLON" , "line" : 6, "lexeme" : ":"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "TYPE",
+	"token" : { "sym": "TYPE" , "line" : 6, "lexeme" : "int"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "RPAREN",
+	"token" : { "sym": "RPAREN" , "line" : 6, "lexeme" : ")"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "optionalReturn",
+	"token" : null,
+	"productionNumber" : 8,
+	"nodeType" : "void",
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "LBRACE",
+	"token" : { "sym": "LBRACE" , "line" : 6, "lexeme" : "{"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "stmts",
+	"token" : null,
+	"productionNumber" : 24,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "vardecl",
+	"token" : null,
+	"productionNumber" : 44,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "VAR",
+	"token" : { "sym": "VAR" , "line" : 7, "lexeme" : "var"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "ID",
+	"token" : { "sym": "ID" , "line" : 7, "lexeme" : "foo"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "COLON",
+	"token" : { "sym": "COLON" , "line" : 7, "lexeme" : ":"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "TYPE",
+	"token" : { "sym": "TYPE" , "line" : 7, "lexeme" : "int"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "SEMI",
+	"token" : { "sym": "SEMI" , "line" : 7, "lexeme" : ""  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "stmts",
+	"token" : null,
+	"productionNumber" : 24,
+	"nodeType" : null,
+		"children" : [
+{
+	"sym" : "RETURN",
+	"token" : { "sym": "RETURN" , "line" : 8, "lexeme" : "return"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "SEMI",
+	"token" : { "sym": "SEMI" , "line" : 8, "lexeme" : ""  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "stmts",
+	"token" : null,
+	"productionNumber" : 26,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "RBRACE",
+	"token" : { "sym": "RBRACE" , "line" : 9, "lexeme" : "}"  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "SEMI",
+	"token" : { "sym": "SEMI" , "line" : 9, "lexeme" : ""  },
+	"productionNumber" : -1,
+	"nodeType" : null,
+		"children" : [
+					],
+	"varInfo" : null
+}
+					],
+	"varInfo" : null
+}
+,
+{
+	"sym" : "decls",
+	"token" : null,
 	"productionNumber" : 5,
 	"nodeType" : null,
 		"children" : [
+					],
+	"varInfo" : null
+}
 					],
 	"varInfo" : null
 }
