@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Formats.Asn1;
 
 namespace lab{
@@ -466,10 +467,17 @@ public class ProductionsExpr{
                         //C ABI expects first parameter to come in via rcx
                         //we're sending the address of the stack to C
                         Asm.add( new OpMov( Register.rsp, Register.rcx));
+                        Asm.add( new OpSub( Register.rsp, 32));
                     }
+                    else
+                        Asm.add( new OpMov( Register.rsp, Register.rcx));
                     Asm.add( new OpCall( Register.rax, 
                         $"function call at line {n["LPAREN"].token.line}"));
-                    Asm.add( new OpAdd( Register.rsp, ftype.paramTypes.Count * 16 ));
+                    if( ftype.builtin ){
+                        Asm.add( new OpAdd( Register.rsp, 32+ftype.paramTypes.Count * 16 ));
+                    }
+                    else
+                        Asm.add( new OpAdd( Register.rsp, ftype.paramTypes.Count * 16 ));
                     //function return value came back in rax
                     //rbx holds storage class if it's not a C function
                     if( ftype.returnType != NodeType.Void ){
@@ -534,7 +542,55 @@ public class ProductionsExpr{
             new("factor :: STRINGCONST",
                 setNodeTypes: (n) => {
                     n.nodeType = NodeType.String;
-                }),
+                },
+                generateCode: (n) => {
+                    //make code for factor
+                    string s = n["STRINGCONST"].token.lexeme;
+                    Stack<int> doubleQuoteStack = new Stack<int>();
+
+                    string stripped_s = "";
+                    //Tweak the string to work
+                    for(int i = 1; i < s.Length-1; i++){
+
+                        //
+                        if( s[i] == '\\'){
+                            if(s[i+1] == 'n'){
+                                stripped_s += '\n';
+                            }
+                            else if(s[i+1] == 't'){
+                                stripped_s += '\t';
+                            }
+                            else if(s[i+1] == '"'){
+                                if(s[i+1] == '"' && doubleQuoteStack.Count == 0){
+                                    doubleQuoteStack.Push(1);
+                                }
+                                else if(s[i+1] == '"' && doubleQuoteStack.Count == 1){
+                                    doubleQuoteStack.Pop();
+                                }
+                                stripped_s += '\"';
+                            }
+                            else if(s[i+1] == '\\'){
+                                stripped_s += '\\';
+                            }
+                            else{
+                                Environment.Exit(04242025);
+                            }
+                            i++;
+                        }
+                        else{
+                            stripped_s += s[i];
+                        }
+                    }
+                    
+                    if( doubleQuoteStack.Count != 0){
+                        Console.WriteLine($"There were {doubleQuoteStack.Count} items on the stack!");
+                        Environment.Exit(69420);
+                    }
+                    StringPool.addString( stripped_s );
+                    Asm.add( new OpMov(StringPool.getLabel(stripped_s), Register.rax));
+                    Asm.add( new OpPush(Register.rax, StorageClass.PRIMITIVE));
+                }
+                ),
             new("factor :: BOOLCONST",
                 setNodeTypes: (n) => {
                     n.nodeType = NodeType.Bool;

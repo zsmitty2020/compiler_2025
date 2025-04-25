@@ -12,6 +12,11 @@ typedef struct StackVar_ {
     int64_t value;
 } StackVar;
 
+typedef struct String_ {
+    int64_t length;
+    char data[1];       //bogus length
+} String;
+
 HANDLE stdin;
 HANDLE stdout;
 
@@ -96,6 +101,25 @@ __attribute__((ms_abi)) void rtcleanup()
 {
     CloseHandle(stdin);
     CloseHandle(stdout);
+}
+
+__attribute__((ms_abi)) int length(StackVar stk[])
+{
+    String* s = (String*) stk[0].value;
+    return s->length;   //Is this right???
+}
+
+__attribute__((ms_abi)) void print(StackVar stk[])
+{
+    String* s = (String*) stk[0].value;
+    DWORD count;
+    char* p = s->data;
+    int64_t numLeft = s->length;
+    while( numLeft ){
+        WriteFile( stdout, p, numLeft, &count, NULL );
+        numLeft -= count;
+        p += count;
+    }
 }
 
 unsigned toBin(uint64_t number, char output[64]){

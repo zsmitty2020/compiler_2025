@@ -1,9 +1,11 @@
 namespace Configuration{
+    
 
     public static class Configuration {
 
-
         //Example paths for Windows
+
+        public static string readonlyDataSection = ".rdata";
 
         //Command to execute clang
         public static readonly string[] clang = new string[] {

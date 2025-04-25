@@ -195,6 +195,16 @@ def main():
 
     return
 
+def escape(s):
+    r=""
+    for c in s:
+        if c == '\n':
+            r += "<newline>"
+        elif c == '\t':
+            r += "<tab>"
+        else:
+            r += c
+    return r
 
 def check( compilerstatus, exestatus, exereturntype, exestdout, exestderr,
             expected):
@@ -222,7 +232,11 @@ def check( compilerstatus, exestatus, exereturntype, exestdout, exestderr,
                     return False,f"Bad return value: Executable {past(exereturntype,exestatus)}, but we expected it to {present(expectedreturntype,expected['returns'])}"
                 else:
                     if expected.get("output") and exestdout != expected["output"]:
-                        return False,f"Executable printed incorrect output"
+                        return False,(
+                            f"Executable printed incorrect output\n"
+                            f"Expected: {escape(expected.get('output'))}\n"
+                            f"Got:      {escape(exestdout)}"
+                        )
                     else:
                         return True,"OK!"
 
